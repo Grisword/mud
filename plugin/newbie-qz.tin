@@ -1,0 +1,323 @@
+#class newbie-qz open;
+
+#act {纸条上是全真弟子需要做的工作，可是上面并没有你的名字。} {
+	#delay {10} {notice_job};
+};
+
+#alias {notice_job} {
+	l notice;
+	drink jiudai;
+	eat liang;
+
+	#var need_job 1;
+
+	#act {速去校经房帮助道童，不得有误。} {
+		#if { "$need_job" == "1" } {
+                  #var need_job 0;
+			n;w;
+			#delay {1} {askdaotong};
+            };
+	};
+
+	#act {速去药圃帮助老者，不得有误。} {
+		#if { "$need_job" == "1" } {
+			#var need_job 0;
+			#7 n;
+ 			#delay {2} {asklaozhe};
+		};
+	};
+
+};
+
+#alias {asklaozhe} {
+	ask lao zhe about help;
+	#act {你向老者打听有关『help』的消息。} {
+		#var need_job 1;
+	};
+
+	#act {老者说道：「你去奇草那里，给那些草施(shifei)点肥。」} {
+		#if { "$need_job" == "1" } {
+			#var need_job 0;
+			shifei_job;
+		};
+	};
+
+
+	#act {老者说道：「你去奇草那里，给那些草浇(jiao)点水，别干死了。」} {
+		#if { "$need_job" == "1" } {
+			#var need_job 0;
+			jiao_job;
+		};
+	};
+	
+	#act {老者说道：「最近药圃要收药，缺乏人手，你帮我收齐(shouqi)十株药材吧。」} {
+	   	#if { "$need_job" == "1" } {
+                  #var need_job 0;
+                  shouqi_job;
+            };
+      };
+
+	#act {老者说道：「你去奇草挖(wa)一株草药栽种(zai)到这里吧。」} {
+	      #if { "$need_job" == "1" } {
+                  #var need_job 0;
+                  zai_job;
+            };
+      };
+
+	#act {老者说道：「我这没什么事，你去别处看看吧。」} {
+		#if { "$need_job" == "1" } {
+			#var need_job 0;
+			#delay {3} {#7 s;#delay {2} {notice_job};};
+		};
+	};
+	
+};
+
+
+#alias {zai_job} {
+	#2 e;
+	
+	#ticker {wa} {wa} {3};
+
+	#act {你挖出了一棵完整的药草。} {
+		#untick {wa};
+		#delay {4} {
+			w;w;
+			#ticker {zai} {zai} {3};
+		};
+	};
+
+	#act {药草被移栽到这里，终于成活了。} {
+		#untick {zai};
+		#delay {2} {
+			s;n;
+			#delay {2} {asklaozhe};
+		};
+	};
+};
+
+
+#alias {jiao_job} {
+	#2 e;get shui tong;
+
+	#act {你捡起一个水桶。} {
+		#delay {2} {n;dashui;};
+	};
+
+	#act {你打起了满满一桶水。} {
+		#delay {2} {s;jiao shui;};
+	};
+
+	#act {浇水任务完成了！} {
+		#delay {2} {drop shui tong};
+	};
+
+	#act {你丢下一个水桶。} {
+		#delay {2} {w;w;#delay {2} {asklaozhe}};
+	};
+};
+
+#alias {shouqi_job} {
+	#ticker {shouqi} {shouqi;} {3};
+	#act {你凑齐十株药材，全部交给了老者。} {
+		#untick {shouqi};
+		#delay {2} {asklaozhe};
+	};
+};
+
+#alias {shifei_job} {
+	e;e;get fen tong;
+
+	#act {你捡起一个粪桶。} {
+		#delay {2} {n;n;yao;};
+	};
+
+	#act {你打起了满满一桶粪便，心满意足地叹了口气。} {
+		#delay {2} {s;s;shifei;};
+	};
+
+	#act {施肥任务完成了！} {
+		#delay {2} {drop fen tong;};
+	};
+
+	#act {你丢下一个粪桶。} {
+		#delay {2} {w;w;asklaozhe};
+	};
+};
+
+#alias {askdaotong} {
+	ask daotong about 帮忙;
+
+	#act {你向道童打听有关『帮忙』的消息。} {
+		#var need_job 1;
+	};
+
+	#act {道童说道：「我肚子不太舒服，你能帮我在这里誊写(write)完道德经吗？」} {
+		#if { "$need_job" == "1" } {
+			write_job;
+			#var need_job 0;
+		};
+	};
+
+	#act {道童说道：「我的前些天誊写的书不见了，但是肯定没带出全真，你帮我找回来好吗？」} {
+		#if { "$need_job" == "1" } {
+			#var need_job 0;
+			#delay {2} {search_job;};
+		};
+	};
+
+	#act {道童说道：「这本誊抄的道德经有个字似乎模糊了，你帮我找(zhao)出来吧。」} {
+		 #if { "$need_job" == "1" } {
+                  #var need_job 0;
+                  #delay {2} {zhao_job;};
+            };
+	};
+
+	#act {道童说道：「我这没什么事，你去别处看看吧。」} {
+		#if { "$need_job" == "1" } {
+			#var need_job 0;
+			e;s;
+			#delay {1} {notice_job};
+		};
+	};
+};
+
+
+#alias {zhao_job} {
+	zhao;
+
+	#class zhao.tmp open;
+	#act {~\e[1;31m%%1\e[2;37;0m} {
+		#var text %%1;
+		#delay {2} {gai $text;};
+		#class zhao.tmp kill;
+	};	
+	#class zhao.tmp close;
+
+	#act {你一眼就发现了错误所在，太明显了，去把道德经交给道童吧。} {
+		#delay {2} {give daotong daode jing;};
+	};	
+};
+
+#alias {write_job} {
+	write;
+
+	#act {你写完了一页，赶紧再蘸墨继续抄誊。} {
+		#delay {1} {write;};
+	};	
+	#act {道童交给你的誊抄任务完成了。} {
+		#delay {2} {askdaotong;};
+	};
+};
+
+#alias {search_job} {
+	#list search_path create {e;e;e;n;n;n;w;w;w;s;s;e;open door;n;open door;s;e;n;s;w;w;w;n;n;n;s;w;n;n;e;n;e;e;e;e;e;e;s;e;s;s;s;n;n;n;w;n;w;n;n;s;s;w;w;s;s;n;n;w;n;s;w;w;s;w;s;s;s;s;s;s;e;e;e;e;s;s;s;s;sd;s;sd;sd;se;s;se;nw;n;nw;nu;nu;n;nu;e;w;n;e;w;w;e;n;e;e;e;w;n;s;w;n;s;w;w;w;w;w;s;n;e;s;n;e;e;e;n;n;w;w;s;n;w;s;n;w;n;n;n;n;e;s;s;e;n;n;n;s;e;e;n;s;e;n;s;s;s;s;w;s;n;w;w};
+	#var search_step 1;
+	#list search_path size num;
+	search.start;
+
+	#alias {search.next} {
+		#if { $search_step > $num } {
+			search.stop;
+			#showme 遍历完成;
+			search.finish;
+		} {
+			#list search_path get $search_step tmp_dir;
+			#math search_step {$search_step+1};
+			$tmp_dir;
+		};
+	};	
+
+	#alias {search.stop} {#untick search;};
+	#alias {search.start} {#ticker {search} {search.next;} {1};};
+	#alias {search.finish} {
+		#if { "$shu" == "1" } {
+			give daotong daotong's jing;
+		} {
+			ask daotong about fail;
+		};
+	};
+
+
+	#act {道童的道德经(Daotong's jing)} {
+		get daotong's jing;
+		search.stop;
+	};
+
+	#act {你拣起了一本道童的道德经。} {
+		#ticker {search} {search.next;} {0.3};
+		#var shu 1;
+	};
+
+	#act {道童接过你手里的书，大喜道：就是我的！} {
+		#delay {2} {askdaotong};	
+	};
+
+};
+
+
+#alias {askjob} {
+	ask daoren about job;
+
+	#class tmp open;
+	#act {你向杂役道人打听有关『job』的消息。} {
+		#var need_job 1;
+	};
+	
+	#act {^{杂役道人说道：「我不是让你去清扫石阶了吗？」|杂役道人说道：「你去把从山下石阶到宫门的一段路去扫(sao)干净。」}} {
+		#if { "$need_job" == "1" } {
+			saodi;
+			#var need_job 0;
+		};
+	};
+	#class tmp close;
+};
+
+#alias {saodi} {
+	
+	goto_xck;
+
+	#alias {goto_xck} {
+		set walk_path southdown|south|southdown|southdown|southeast|south|southeast;
+		set walk_speed -1;
+		walk path;
+	};
+
+	#list sao_path create {nw;n;nw;nu;nu;n;nu};
+	#var sao_step 1;
+
+	#alias {movenext} {
+		#list sao_path get $sao_step cmd;
+		#math sao_step {$sao_step+1};
+		$cmd;
+		#if { "$sao_step" == "8" } {
+			#showme 任务完成了;
+			#delay {4} {askjob};
+		} {
+			#delay {2} {sao};
+		};
+	};
+
+	#class saodi open;
+	
+	#act {你的自建路径行走到达了终点。} {
+		#delay {2} {sao};
+	};
+
+	#act {{你胡乱拨扫，把落叶又弄得到处都是。|你挥舞着大扫把，开始清扫这里的落叶。}} {
+		#delay {3} {sao};
+	};
+
+	#act {你正忙着呢。} {
+		#delay {2} {sao};
+	};
+		
+	#act {这里已经被打扫的一尘不染了。} {
+		movenext;
+	};
+
+	#clas saodi open;
+
+};
+
+#class newbie-qz close;
