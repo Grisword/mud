@@ -1,13 +1,54 @@
 #class newbie-qz open;
+#var actions {read_shediao};
 
 #act {纸条上是全真弟子需要做的工作，可是上面并没有你的名字。} {
-	#delay {10} {notice_job};
+	#nop {#delay {10} {notice_job};};
+	$actions;
 };
+
+#alias {notice_to_sleep} {#4 n;w;n};
+#alias {sleep_to_notice} {s;e;#4 s};
+
+#alias {chifan} {
+	set walk_path south|south|east|east|north|do_zuo|south|west|west|north|north;
+	walk path;
+	#delay {10} notice_job;
+};
+
+#alias {read_shediao} {
+	notice_to_sleep;
+	read shediao 50;
+
+	#class shediao.tmp open;
+	#act {你已经很累了，歇歇再读吧，身体要紧。} {
+		#delay {1} {yun regenerate};
+	};
+
+	#act {你略一凝神，精神看起来好多了。} {
+		read shediao 50;
+	};
+
+	#act {你的内力不够。} {
+		#delay {2} {sleep;};
+	};
+	
+	#act {你刚在三分钟内睡过一觉, 多睡对身体有害无益!} {
+		#delay {5} {sleep};
+	};
+
+	#act {你一觉醒来，精神抖擞地活动了几下手脚。} {
+		sleep_to_notice;
+		#class shediao.tmp kill;
+		#delay {2} {chifan;};
+		#delay {8} {notice_job;};
+	};
+
+	#class shediao.tmp close;
+};
+
 
 #alias {notice_job} {
 	l notice;
-	drink jiudai;
-	eat liang;
 
 	#var need_job 1;
 
@@ -162,7 +203,7 @@
 	#act {道童说道：「我的前些天誊写的书不见了，但是肯定没带出全真，你帮我找回来好吗？」} {
 		#if { "$need_job" == "1" } {
 			#var need_job 0;
-			#delay {2} {search_job;};
+			#delay {4} {search_job;};
 		};
 	};
 
@@ -184,19 +225,32 @@
 
 
 #alias {zhao_job} {
-	zhao;
 
 	#class zhao.tmp open;
-	#act {~\e[1;31m%%1\e[2;37;0m} {
+	#act {~m{\S{2}}\e[} {
 		#var text %%1;
 		#delay {2} {gai $text;};
 		#class zhao.tmp kill;
 	};	
 	#class zhao.tmp close;
 
+
 	#act {你一眼就发现了错误所在，太明显了，去把道德经交给道童吧。} {
-		#delay {2} {give daotong daode jing;};
+		#delay {2} {
+			give daotong daode jing;
+			#delay {2} {askdaotong};			
+		};
 	};	
+
+	#act {你好像弄错了，越改越糟，这本书不能要了。} {
+		#delay {2} {
+			ask daotong about fail;
+			#delay {2} {askdaotong};
+		};
+	};
+
+	zhao;
+
 };
 
 #alias {write_job} {
@@ -211,10 +265,11 @@
 };
 
 #alias {search_job} {
-	#list search_path create {e;e;e;n;n;n;w;w;w;s;s;e;open door;n;open door;s;e;n;s;w;w;w;n;n;n;s;w;n;n;e;n;e;e;e;e;e;e;s;e;s;s;s;n;n;n;w;n;w;n;n;s;s;w;w;s;s;n;n;w;n;s;w;w;s;w;s;s;s;s;s;s;e;e;e;e;s;s;s;s;sd;s;sd;sd;se;s;se;nw;n;nw;nu;nu;n;nu;e;w;n;e;w;w;e;n;e;e;e;w;n;s;w;n;s;w;w;w;w;w;s;n;e;s;n;e;e;e;n;n;w;w;s;n;w;s;n;w;n;n;n;n;e;s;s;e;n;n;n;s;e;e;n;s;e;n;s;s;s;s;w;s;n;w;w};
+	#list search_path create {e;e;e;n;n;n;w;w;w;s;s;e;open door;n;open door;s;e;n;s;w;w;w;n;n;n;s;w;n;n;e;n;e;e;e;e;e;e;s;e;s;s;s;n;n;n;w;n;w;n;n;s;s;w;w;s;s;n;n;w;w;w;s;w;s;s;s;s;s;s;e;e;e;e;s;s;s;s;sd;s;sd;sd;se;s;se;nw;n;nw;nu;nu;n;nu;e;w;n;e;w;w;e;n;e;e;e;w;n;s;w;n;s;w;w;w;w;w;s;n;e;s;n;e;e;e;n;n;w;w;s;n;w;s;n;w;n;n;n;n;e;s;s;e;n;n;n;s;e;e;n;s;e;n;s;s;s;s;w;s;n;w;w};
 	#var search_step 1;
 	#list search_path size num;
-	search.start;
+	#var shu 0;
+	#ticker {search} {search.next;} {0.5};
 
 	#alias {search.next} {
 		#if { $search_step > $num } {
@@ -229,28 +284,30 @@
 	};	
 
 	#alias {search.stop} {#untick search;};
-	#alias {search.start} {#ticker {search} {search.next;} {1};};
 	#alias {search.finish} {
 		#if { "$shu" == "1" } {
 			give daotong daotong's jing;
 		} {
 			ask daotong about fail;
 		};
+		#delay {2} {askdaotong};
 	};
 
 
 	#act {道童的道德经(Daotong's jing)} {
-		get daotong's jing;
-		search.stop;
+		#if { "$shu" == "0" } {
+			get daotong's jing;
+			search.stop;
+		};
+	};
+
+	#act {这本书根本乱七八糟，不值一看！} {
+		#ticker {search} {search.next;} {0.5};
 	};
 
 	#act {你拣起了一本道童的道德经。} {
 		#ticker {search} {search.next;} {0.3};
 		#var shu 1;
-	};
-
-	#act {道童接过你手里的书，大喜道：就是我的！} {
-		#delay {2} {askdaotong};	
 	};
 
 };
@@ -275,13 +332,12 @@
 
 #alias {saodi} {
 	
-	goto_xck;
-
 	#alias {goto_xck} {
 		set walk_path southdown|south|southdown|southdown|southeast|south|southeast;
 		set walk_speed -1;
 		walk path;
 	};
+	goto_xck;
 
 	#list sao_path create {nw;n;nw;nu;nu;n;nu};
 	#var sao_step 1;
