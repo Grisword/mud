@@ -1,0 +1,71 @@
+#alias {zuiquan.stop} {#untick tuna;#untick {hit_muren};#class zuiquan kill};
+#alias {zuiquan.pause} {halt;#untick {hit_muren};};
+#alias {zuiquan.go} {
+	hpbrief;
+	yun qi;
+	#ticker {hit_muren} {
+		yun qi;
+		perform cuff.lingwu;
+		#delay {5} {drink jiudai;eat liang;};
+		hpbrief;
+		#if { $jingli < 500 } {
+			#var need_tuna 1;
+			zuiquan.pause;
+			#ticker {tuna} {tuna max} {5};
+		};
+	} {15};
+	fight mu ren;
+	#delay {5} {perform cuff.lingwu};
+};
+
+
+#alias {check_pfm} {
+	#list pfms create {zwsc;lhzj;zxhc;zsms;sqzh;gfzj};
+	#foreach $pfms[%*] {sk_name} {
+		#showme $sk_name;
+		perform cuff.$sk_name;
+	};
+};
+
+#class zuiquan open;
+
+
+#act {你刚跟这个木人练过功！} {
+	#delay {1} {fight mu ren 2;};
+};
+
+#act {你盘膝坐下，开始吐纳炼精。} {
+	#untick {tuna};
+};
+
+
+#act {你现在正忙着呢。} {
+	#if { "$need_tuna" == "1" } {
+		tuna max;
+	};
+};
+
+#act {你现在精不足，无法修行精力！} {
+	#delay {2} {yun regenerate};
+	#delay {5} {tuna max};
+};
+
+#act {你吐纳完毕，睁开双眼，站了起来。} {
+	#delay {1} {yun regenerate;};
+	hpbrief;
+	#if { $jingli < 2500 } {
+		#delay {2} {tuna max;};
+	} { #delay {2} {yun regenerate;zuiquan.go;#var need_tuna 0;}};
+};
+
+#act {你现在精力接近圆满状态。} {
+	#delay {2} {yun regenerate;zuiquan.go;#var need_tuna 0;}
+};
+
+#act {未有对手或者你和对方未处于战斗中，不能使用「领悟醉拳」。} {
+	#var need_tuna 1;
+	zuiquan.pause;
+	#ticker {tuna} {tuna max} {5};
+};
+
+#class zuiquan close;
