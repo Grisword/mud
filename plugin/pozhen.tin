@@ -1,0 +1,148 @@
+#class pozhen open;
+
+#var here_room 2349;
+#var pz_pfm {perform liumai-shenjian.liumai};
+
+#alias ask.job {
+	#class ask.job open;
+	#action {你对陆乘风道：“听闻近来有人冒名桃花岛弟子在%S布下迷阵行恶，我愿代劳除去此獠。”} {
+		#var jobplace %%1;
+		zhanbu.place;
+	};
+	#action {^陆乘风对着你点了点头。} {
+		show_to_do $jobplace;	
+		#class ask.job kill;
+	};
+	
+	#class ask.job close;
+	ask lu about 破阵;
+};
+
+
+#alias ask.over {ask lu about 破阵奖励};
+#alias ask.fail {ask lu about 破阵失败};
+#alias zhanbu.place {
+	#echo <cfa><EAA>=================================================;
+	#echo <cfa><EAA>　　破阵地点：<AAA>　$jobplace。;
+	#echo <cfa><EAA>=================================================;
+};
+#alias zhanbu.maze {
+	#class zhanbu.maze open;
+	#var pos {{nw}{2}{n}{2}{ne}{2}{w}{2}{e}{2}{sw}{2}{s}{2}{se}{2}};
+	#var posstep 0;
+	#var issame 0;
+	#var direc {nw;n;ne;w;e;sw;s;se};
+	#foreach $direc direction {
+		#var exec {#alias $direction {#var pace $direction;#send $direction}};
+		$exec;
+	};
+	#function printdirec {
+		#var printtext {　　经推算，正确方向可能为：};
+		#foreach $direc direction {
+			#if {$pos.$direction} {
+				#var printtext $printtext $direction;
+				#var cmd $direction;
+				#if {"$cmd" == "$lastcmd" } {#var issame 1;};
+			};
+		};
+		#echo <cfa><EAA>=================================================;
+		#echo <cfa>$printtext;
+		#echo <cfa><EAA>=================================================;
+		#return #cr;
+	};
+	#action {~{\e\[5m\e\[42|\e\[42}%S{\e\[5m\e\[42|\e\[42}%S{\e\[5m\e\[42|\e\[42}} {
+		#if {$posstep} {
+			#var posstep 0;
+			#if {"%%1" == "\e[42"} {#var pos.sw 0};
+			#elseif {"%%1" == "\e[5m\e[42" && !$pos.sw} {#var pos.sw 0};
+			#else {#var pos.sw 1};
+			#if {"%%3" == "\e[42"} {#var pos.s 0};
+			#elseif {"%%3" == "\e[5m\e[42" && !$pos.s} {#var pos.s 0};
+			#else {#var pos.s 1};
+			#if {"%%5" == "\e[42"} {#var pos.se 0};
+			#elseif {"%%5" == "\e[5m\e[42" && !$pos.se} {#var pos.se 0};
+			#else {#var pos.se 1};
+			@printdirec{};
+			#if { "$issame" == "0" } {#var lastcmd $cmd;} {#var cmd $lastcmd;};
+			#delay {2} {#showme 准备往 $cmd 方向破阵;$cmd;};	
+			#var issame 0;
+		};
+		#else {
+			#var posstep 1;
+			#if {"%%1" == "\e[42"} {#var pos.nw 0};
+			#elseif {"%%1" == "\e[5m\e[42" && !$pos.nw} {#var pos.nw 0};
+			#else {#var pos.nw 1};
+			#if {"%%3" == "\e[42"} {#var pos.n 0};
+			#elseif {"%%3" == "\e[5m\e[42" && !$pos.n} {#var pos.n 0};
+			#else {#var pos.n 1};
+			#if {"%%5" == "\e[42"} {#var pos.ne 0};
+			#elseif {"%%5" == "\e[5m\e[42" && !$pos.ne} {#var pos.ne 0};
+			#else {#var pos.ne 1};
+		};
+	} {1};
+	#action {~{\e\[5m\e\[42|\e\[42}%S{\e\[5m\e\[42|\e\[42}} {
+		#if {"%%1" == "\e[42"} {#var pos.w 0};
+		#elseif {"%%1" == "\e[5m\e[42" && !$pos.w} {#var pos.w 0};
+		#else {#var pos.w 1};
+		#if {"%%3" == "\e[42"} {#var pos.e 0};
+		#elseif {"%%3" == "\e[5m\e[42" && !$pos.e} {#var pos.e 0};
+		#else {#var pos.e 1};
+	} {2};
+	#action {你尝试破阵，可惜选择了错误的方向，损失了一些气血和内力。} {
+		#var pos.$pace 0;
+	};
+	#action {这里的迷阵在你眼中如同儿戏一般。} {
+		#var pos {{nw}{2}{n}{2}{ne}{2}{w}{2}{e}{2}{sw}{2}{s}{2}{se}{2}};
+		#var posstep 0;
+	};
+	#action {破阵失败！这里的真相恐怕永远被掩盖。} {
+		#class zhanbu.maze kill;
+		#echo <cfa><EAA>=================================================;
+		#echo <cfa>　　破阵失败！;
+		#echo <cfa><EAA>=================================================;
+		#var pz_status 2;
+	};
+	#action {你彻底破解了这里的迷阵！} {
+		#class zhanbu.maze kill;
+		#echo <cfa><EAA>=================================================;
+		#echo <cfa>　　破阵成功！;
+		#echo <cfa><EAA>=================================================;
+	};
+	#action {看起来%S想杀死你！} {
+		#class zhanbu.maze.kill open;
+		#action {大 恶 %%1(%D)} {
+			#format npcid %l %%%1;
+			kill $npcid;
+			#delay {0.3} {$pz_pfm;};
+		};
+		#action {%%1道：想不到我最终还是失败了！哎！} {
+			#class zhanbu.maze.kill kill;
+			#echo <cfa><EAA>=================================================;
+			#echo <cfa>　　破阵任务成功完成！;
+			#echo <cfa><EAA>=================================================;
+			s;
+			#var pz_status 1;
+		};
+		#class zhanbu.maze.kill close;
+	};
+
+	#class zhanbu.maze close;
+	jiali max;
+	yun recover;
+	yun regenerate;
+	yun qi;
+	yun powerup;
+	zhanbu -maze;
+};
+
+#action {{你正在运行内功加速全身气血恢复，无法静下心来搬运真气。|只见本神盘膝坐下，使出一阳指的独门功夫，开始给你疗伤。|你运功完毕，深深吸了口气，站了起来。}} {
+	#delay {3} {yun recover;};
+};
+
+#action {{你现在气力充沛。|你深深吸了几口气，脸色看起来好多了。|你正在运行真气加速气血恢复，无法再分出内力来。}} {
+	#delay {2} {
+		#if { $neili < 8000 && "$pz_dazuo" == "1" } {dazuo max;} {#var pz_dazuo 0;drink jiudai;eat liang;#showme 准备完成，可以接活了;};
+	};
+};
+
+#class pozhen close;
