@@ -41,6 +41,7 @@
 				INVOKE;
 				#showme 飞行路线图：$fly_path;
 				#showme 飞行距离： $fly_num;
+				gps.walk;
 			};
 		} {
             	#showme 源地址无法定位;
@@ -50,12 +51,13 @@
 
 
 #alias {gps.walk} {
-     	#var step 1;
+    #var step 1;
 	#var tmp_step 1;
-      #var new_path {};
+	#var new_path {};
 	gps.getpath;
 };
 
+#alias {gps.run} {gps.getpath};
 #alias {gps.getpath}{
 	#if { $step >  @numitems{fly_path} } {
 		#showme 设置完成;
@@ -81,10 +83,10 @@
 
 #alias {gps.walkpath} {
 	#alias tmp_walk #cr;
-      #alias tmp_walk %1;
+    	#alias tmp_walk %0;
 	#var tmp_step 1;
 	#if { "$new_path" == "" } {
-		#showme 路径为空，无法行走。;
+		tmp_walk;
 	} {
 		#delay {2} {
 			set walk_path $new_path;
@@ -105,7 +107,7 @@
 
 #function {convertAlias} {
 	#var str %1;
-	#list special_dir_list {create} {cross_che_cj;crush};
+	#list special_dir_list {create} {cross;crush;wieldweapon;};
 	#regex {$str} {%* %*} {#var str &1;};
 	#list {special_dir_list} find $str result;
 };
@@ -129,8 +131,115 @@
 	} 
 };
 
-#alias {cross_che_cj} {
-	ask shao gong about 过江;
+#gag clear: done;
+#alias {clear} {
+    kill %0;
+    #class clear.inner open;
+    #action {^这里没有这个人} {
+        #unaction {^这里没有这个人};
+        #class clear.inner kill;
+        raw;
+        #showme clear: done;
+    } {1};
+    #ticker {kill} {
+        kill %0;
+    } {3};
+    #class clear.inner close;
+};
+
+#alias {on_cleared} {
+    #alias tmp_on_cleared %0;
+    #action {clear: done} {
+        #unaction {clear: done};
+        #delay {3} {
+            tmp_on_cleared;
+        };
+    };
+};
+
+#alias {wieldweapon} {wield $my_weapon;gps.run;};
+
+#alias {crush} {
+	#var target %0;
+	#var style %1;
+	#switch {"$style"}{
+		#case {"wait"} {gps.wait %2};
+		#case {"delay"} {#delay {%2} {gps.getpath}};
+		#default {gps.clear $target};
+	}
+};
+
+#alias {gps.wait} {
+    #var next_action %1;
+    #class gps.action.inner open;
+    #action {^{你的动作还没有完成，不能移动。|你走着走着就陷进了一处沼泽当中，艰难地从沼泽中拔出来。|你小心翼翼往前挪动，遇到艰险难行处，只好放慢脚步。|你还在山中跋涉，一时半会恐怕走不出这藏边群山！|青海湖畔美不胜收，你不由停下脚步，欣赏起了风景。|你还在山中跋涉，一时半会恐怕走不出这西南地绵绵群山！|你还在山中跋涉，一时半会恐怕走不出这六盘山！}} {
+        #delay {again} {
+            ${next_action};
+        } {1};
+        #delay {gps_delay} {
+            #class gps.action.inner kill;
+            gps.run;
+        } {2};
+    } {1};
+    #delay {gps_delay} {
+        #class gps.action.inner kill;
+        gps.run;
+    } {1};
+    #class gps.action.inner close;
+
+    ${next_action};
+};
+
+
+#alias {gps.clear} {
+    clear %0;
+    on_cleared {
+        gps.getpath;
+    };
+};
+
+#alias {cross} {
+	#var target %2;
+      #var style %1;
+      #switch {"$style"} {
+            #case {"che"} {
+			#switch {"$target"} {
+				#case {"hh"} {cross_river 过河};
+				#case {"cj"} {cross_river 过江};
+				#case {"boat"} {enter_boat};
+				#default {zuoche $target};
+			};
+		};
+            #case {"delay"} {#delay {%2} {gps.getpath}};
+      }
+};
+
+#alias {enter_boat} {
+    	enter boat;
+    	#class gps.action.inner open;
+    	#action {小舟终于划到近岸，你从船上走了出来。} {
+        	#unaction {小舟终于划到近岸，你从船上走了出来。};
+        	gps.run;
+    	};
+    	#action {绿衣少女将小船系在树枝之上，你跨上岸去。} {
+        	#unaction {绿衣少女将小船系在树枝之上，你跨上岸去。};
+        	gps.run;
+    	};
+    	#action {你沿着踏板走了上去} {
+        	#unaction {你沿着踏板走了上去};
+        	gps.run;
+    	};
+    	#action {你朝船夫挥了挥手便跨上岸去} {
+        	#unaction {你朝船夫挥了挥手便跨上岸去};
+        	gps.run;
+	};
+	#class gps.action.inner close;
+};
+
+
+#alias {cross_river} {
+	#var tmp_word %1;
+	ask shao gong about $tmp_word;
 	#action {正等着你呢，上来吧。} {#class tmp kill;enter};
 	#action {艄公将一块踏脚板搭上堤岸，} {#class tmp kill;enter};
 	#action {^{%*接过你递给的船资|你的车船通账上还剩%S，这一趟的船资%S。|你吸了口气，一声“船家”，声音中正平和地远远传了出去。|你使出吃奶的力气喊了一声：“船家”}} {
@@ -145,9 +254,26 @@
       #action {^艄公说“到啦，上岸吧”，随即把一块踏脚板搭上堤岸。} {
             #if {${in_boat} == 1} {
                    #var in_boat 0;
-                   out;gps.getpath;
+                   out;gps.run;
 		};
 	};
+};
+
+
+#alias {zuoche} {
+    #ticker {gps_ticker} {
+        hire;
+        qu %1;
+    } {2};
+    #class gps.zuoche.inner open;
+    #action {你登上了一辆马车} {
+        #unticker {gps_ticker};
+    };
+    #action {大车停稳了下来} {
+        #unaction {大车停稳了下来};
+        #delay {zuoche} {xia;gps.run;} {3};
+    };
+    #class gps.zuoche.inner close;
 };
 
 
@@ -156,6 +282,9 @@
     	#alias tmp_check_room %1;
     	#alias {get_pos_done} {
 		#if { "${pos.area}" == "大理城" } {#var pos.area {大理城中};};
+		#if { "${pos.area}" == "荆州" } {#var pos.area {襄阳};};
+		#if { "${pos.area}" == "建康府南" } {#var pos.area {建康府南城};};
+		#if { "${pos.area}" == "建康府北" } {#var pos.area {建康府北城};};
 		#var cmd {php ./bin/get_room.php "${pos.area}${pos.room}" "${user.id}" "${pos.exits}"};
         	INVOKE;
         	#showme $result;
@@ -168,7 +297,9 @@
 
 
 #alias {gps.check_dst} {
-	#var cmd {php ./bin/get_room.php "%1" "${user.id}"};
+	#var dst_room %1;
+	#replace {dst_room} {荆州的} {襄阳};
+	#var cmd {php ./bin/get_room.php "$dst_room" "${user.id}"};
 	INVOKE;
       #showme $result;
 	#var dst_num $num;
