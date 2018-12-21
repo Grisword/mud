@@ -1,0 +1,22 @@
+#class lingwu open;
+
+#act {self state} {dazuo max};
+#act {你的内力不够。} {gosleep;vf;sleep};
+#act {^skbrief ok} {#echo {{领悟中：%s %d/%d(%d%a)} {-1}} {$skname} {$level} {$maxsk} {@eval{$lvpot*100/($level+1)/($level+1)}} {37}};
+#act {你刚在三分钟内睡过一觉, 多睡对身体有害无益! }
+{
+	eat liang;
+	#delay 5 {drink jiudai};
+	#delay 15 {golingwu;lw};
+};
+#act {你领悟了%*次%*} {exert regenerate};
+#act {你略一凝神，精神看起来好多了。} {#delay {1} {lw};};
+#act {你一觉醒来，精神抖擞地活动了几下手脚。} {hpbrief};
+#act {{你运功完毕，深深吸了口气，站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将真气在体内沿脉络运行了一圈}} {golingwu;lw};
+#act {你现在精不够，无法控制内息的流动！} {#delay 10 {hpbrief}};
+#act {你现在精力充沛。} {#delay {1} {lw};};
+#act {你现在过于疲倦,无法静下心来领悟功夫！} {gosleep;vf;sleep};
+#act {你现在的气太少了，无法产生内息运行全身经脉。} {sleep};
+#act {你的内功还没有达到那个境界你至少需要十点的气来打坐！} {dazuo 10};
+
+#class lingwu close;

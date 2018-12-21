@@ -36,12 +36,7 @@
 			#if { $src_num > 1 } {
 				#showme 源地址不唯一，选取第一个合适的房间执行;
 			}{
-				#var cmd {php ./bin/get_path.php "${src_roomno}" "${dst_roomno}" "${user.id}" };
- 				#nop {#showme $cmd;};
-				INVOKE;
-				#showme 飞行路线图：$fly_path;
-				#showme 飞行距离： $fly_num;
-				gps.walk;
+				gps.fly.go $src_roomno $dst_roomno;
 			};
 		} {
             	#showme 源地址无法定位;
@@ -49,12 +44,20 @@
 	};
 };
 
+#alias {gps.fly.go} {
+	#var cmd {php ./bin/get_path.php "%1" "%2" "${user.id}" };
+	#nop {#showme $cmd;};
+	INVOKE;
+ 	#showme 飞行路线图：$fly_path;
+	#showme 飞行距离： $fly_num;
+	gps.walk;
+};
 
 #alias {gps.walk} {
-    #var step 1;
+    	#var step 1;
 	#var tmp_step 1;
 	#var new_path {};
-	gps.getpath;
+	gps.run;
 };
 
 #alias {gps.run} {gps.getpath};
@@ -133,28 +136,29 @@
 
 #gag clear: done;
 #alias {clear} {
-    kill %0;
-    #class clear.inner open;
-    #action {^这里没有这个人} {
-        #unaction {^这里没有这个人};
-        #class clear.inner kill;
-        raw;
-        #showme clear: done;
-    } {1};
-    #ticker {kill} {
-        kill %0;
-    } {3};
-    #class clear.inner close;
+	yun qi;
+	yun powerup;
+    	kill %0;
+    	#class clear.inner open;
+    	#action {^这里没有这个人} {
+        	#unaction {^这里没有这个人};
+        	#class clear.inner kill;
+        	#showme clear: done;
+    	} {1};
+	#ticker {kill} {
+        	kill %0;
+    	} {3};
+    	#class clear.inner close;
 };
 
 #alias {on_cleared} {
-    #alias tmp_on_cleared %0;
-    #action {clear: done} {
-        #unaction {clear: done};
-        #delay {3} {
-            tmp_on_cleared;
-        };
-    };
+    	#alias tmp_on_cleared %0;
+    	#action {clear: done} {
+        	#unaction {clear: done};
+        	#delay {3} {
+            	tmp_on_cleared;
+        	};
+    	};
 };
 
 #alias {wieldweapon} {wield $my_weapon;gps.run;};
@@ -282,9 +286,15 @@
     	#alias tmp_check_room %1;
     	#alias {get_pos_done} {
 		#if { "${pos.area}" == "大理城" } {#var pos.area {大理城中};};
+		#if { "${pos.area}" == "牙山湾" } {#var pos.area {牙山};};
 		#if { "${pos.area}" == "荆州" } {#var pos.area {襄阳};};
+		#if { "${pos.area}" == "明州" } {#var pos.area {嘉兴};};
+	      #if { "${pos.area}" == "桃源县" } {#var pos.area {桃源};};
 		#if { "${pos.area}" == "建康府南" } {#var pos.area {建康府南城};};
 		#if { "${pos.area}" == "建康府北" } {#var pos.area {建康府北城};};
+		#if { "${pos.area}" == "峨嵋后山" } {#var pos.area {峨眉后山};};
+		#if { "${pos.area}" == "星宿海" } {#var pos.area {星宿};};
+		#if { "${pos.area2}" == "西湖" } {#var pos.area {西湖};};
 		#var cmd {php ./bin/get_room.php "${pos.area}${pos.room}" "${user.id}" "${pos.exits}"};
         	INVOKE;
         	#showme $result;
@@ -347,7 +357,7 @@
     	} {7};
 
   	#action {这里唯一的{出口|方向}有 %w。} {
-        	#var exits_list  {%%1;};
+        	#var exits_list  {%%2;};
         	get_exits_done;
     	} {7};
 
@@ -405,6 +415,7 @@
 	#alias tmp_get_area #cr;
     	#alias tmp_get_area %1;
     	#var pos.area {};
+	#var pos.area2 {};
     	#class record.inner open;
     	#action {这里暂时没有地图。} {
         	#class record.inner kill;
@@ -419,6 +430,7 @@
     	#action {【%*地图－%*】} {
         	#class record.inner kill;
         	#var pos.area %%1;
+		#var pos.area2 %%2;
         	tmp_get_area;
     	};
     	#class record.inner close;

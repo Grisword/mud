@@ -1,0 +1,168 @@
+#class dofull open;
+
+#alias gosleep {w;w;w;n};
+#alias golingwu {s;e;e;e};
+
+#alias {setskill} {	#list {skills} {add} %1;showsk;};
+#alias {doclear} {#list {skills} {clear};};
+#alias {showsk} {#showme $skills};
+
+#var sknum 1;
+
+#alias {dofull} {
+	#list {skills} {size} {num};
+	#if {$sknum > $num } {
+		#showme full skills完毕;
+	} {
+		#list {skills} {get} $sknum {base_sk};
+		#showme 开始领悟 $base_sk;
+		lwon $base_sk;
+	};
+
+	#act {你的基本功夫比你的高级功夫还高！} {
+		gosleep;
+		lwoff;
+		lxon $base_sk;
+	};
+
+	#act {你必须空手才能练习} {
+		unwield all;
+		lxon $base_sk;
+	};
+
+	#act {你要装备 %1 类武器才能练习} {
+		unwield all;
+		wield %1;
+		#delay {2} {lxon $base_sk;};
+	};
+	
+	#act {你需要提高基本功，不然练得再多也没有用。} {
+		lxoff;
+		#delay {1} {lwon $base_sk};
+	};
+
+	#act {你已经达到你的技能等级极限！} {
+		#math sknum {$sknum+1};
+		#delay {2} {gosleep;#delay {2} {dofull};};
+	};
+};
+
+
+#alias {full.init} {
+	#var mymenpai %1;
+	#if {"$mymenpai"=="sl"}
+    {
+        #alias gosleep {d;sd;w;n};
+        #alias golingwu {s;e;nu;u};
+    };
+    #elseif {"$mymenpai"=="wd"}
+    {
+        #alias gosleep {e;e;s;e;e};
+        #alias golingwu {w;w;n;w;w};
+    };
+    #elseif {"$mymenpai"=="em"}
+    {
+        #alias gosleep {d;n;w;w};
+        #alias golingwu {e;e;s;u};
+    };
+    #elseif {"$mymenpai"=="gb"}
+    {
+        #alias gosleep {enter};
+        #alias golingwu {out};
+    };
+    #elseif {"$mymenpai"=="hs"}
+    {
+        #alias gosleep {w;w;s};
+        #alias golingwu {n;e;e};
+    };
+    #elseif {"$mymenpai"=="雪山派"}
+    {
+        #alias gosleep {w;s};
+        #alias golingwu {n;e};
+    };
+	#elseif {"$mymenpai"=="全真派"}
+    {
+        #alias gosleep {n;n;n};
+        #alias golingwu {s;s;s};
+    };
+    #elseif {"$mymenpai"=="天地会"}
+    {
+        #alias gosleep {e;e};
+        #alias golingwu {w;w};
+    };
+    #elseif {"$mymenpai"=="天龙寺"}
+    {
+        #alias gosleep {s;enter};
+        #alias golingwu {out;n};
+    };
+    #elseif {"$mymenpai"=="白驼山"}
+    {
+        #alias gosleep {out;w;w;n};
+        #alias golingwu {s;e;e;ask trainer about 练功};
+    };
+    #elseif {"$mymenpai"=="大轮寺"}
+    {
+        #if {"$mygender"=="男"}
+        {
+            #alias gosleep {e;s;e;enter};
+            #alias golingwu {out;w;n;w};
+        };
+        #else
+        {
+            #alias gosleep {e;s;w;enter};
+            #alias golingwu {out;e;n;w};
+        };
+    };
+    #elseif {"$mymenpai"=="日月神教"}
+    {
+        #alias gosleep {w;w};
+        #alias golingwu {e;e};
+    };
+	    #elseif {"$mymenpai"=="神龙教"}
+    {
+        #alias gosleep {s;w};
+        #alias golingwu {e;n};
+    };
+    #elseif {"$mymenpai"=="星宿派"}
+    {
+        #alias gosleep {w;n};
+        #alias golingwu {s;e};
+    };
+    #elseif {"$mymenpai"=="朝廷"}
+    {
+        #alias gosleep {w};
+        #alias golingwu {e};
+    };
+    #elseif {"$mymenpai"=="gm"}
+    {
+        #alias gosleep {out;w;s;s;s;w;w;s};
+        #alias golingwu {n;e;e;n;n;n;e;enter};
+    };
+    #elseif {"$mymenpai"=="灵鹫宫"}
+    {
+        #alias gosleep {n;w;s};
+        #alias golingwu {n;e;s};
+    };
+    #elseif {"$mymenpai"=="mj"}
+    {
+        #alias gosleep {w;w;w;n};
+        #alias golingwu {s;e;e;e};
+    };
+    #elseif {"$mymenpai"=="姑苏慕容"}
+    {
+        #alias gosleep {w;w;n;n;e};
+        #alias golingwu {w;s;s;e;e};
+    };
+    #elseif {"$mymenpai"=="桃花岛"}
+    {
+        #alias gosleep {e;e;e;s;e};
+        #alias golingwu {w;n;w;w;w};
+    };
+    #else
+    {
+        #alias gosleep {e;e};
+        #alias golingwu {w;w};
+    };	
+};
+
+#class dofull close;

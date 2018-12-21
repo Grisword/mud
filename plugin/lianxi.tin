@@ -1,0 +1,46 @@
+#class lianxi open;
+
+#act {你深深吸了几口气} {lx};
+#act {你的内力不够} {#delay tmp {vf;sleep} {1}};
+#act {你的内力太低了。} {#delay tmp {vf;sleep} {1}};
+#act {你现在内力不足，} {#delay tmp {vf;sleep} {1}};
+#act {你一觉醒来，精神抖擞地活动了几下手脚。}
+{
+	hpbrief;
+};
+#act {你刚在三分钟内睡过一觉, 多睡对身体有害无益}
+{
+	#echo {{练习中：%s %d/%d(%d%a)} {-1}} {$skname} {$level} {$maxsk} {@eval{$lvpot*100/($level+1)/($level+1)}} {37};
+	eat liang;
+	#delay 5 {drink jiudai};
+	#delay 10 {hpbrief};
+};
+#act {你%*练习%*，获得了%*进步} {#delay {0.5} {exert recover;exert regenerate};};
+#act {你的{体力|气}不够} {#delay {1} {exert recover;exert regenerate};};
+#act {你目前精神状态并不足以领悟独孤九剑。}  {exert recover;exert regenerate};
+#act {{你运功完毕，深深吸了口气，站了起来。|你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。|你将内息走了个小周天，流回丹田，收功站了起来。|你将真气在体内沿脉络运行了一圈}}
+{
+	lx;
+};
+#act {你的体力太} {#delay {1} {exert recover};};
+#act {你现在手足酸软，休息一下再练吧。} {exert recover};
+#act {^skbrief ok} {#echo {{练习中：%s %d/%d(%d%a)} {-1}} {$skname} {$level} {$maxsk} {@eval{$lvpot*100/($level+1)/($level+1)}} {37}};
+#act {self state} {dazuo max};
+#act {你现在精不够，无法控制内息的流动} {exert regenerate;#ticker hp {hpbrief;#unticker hp} {10}};
+#nop #act {你现在的气太少了，无法产生内息运行全身经脉。} {#ticker hp {hpbrief;#unticker hp} {10}};
+#act {你现在的气太少了，无法产生内息运行全身经脉。} {exert recover};
+#act {你的内功还没有达到那个境界你至少需要十点的气来打坐} {#ticker hp {hpbrief;#unticker hp} {10}};
+#act {你太累了，还是先休息一下吧。} {#delay {1} {exert recover};};
+#act {你精血不足，翻来覆去无法入眠!}
+{
+	hpbrief;
+};
+#act {你现在气力充沛。} {lx};
+#act {你的精力太差了，不能练} {#delay {1} {exert recover};};
+#act {你的现在的内力不足，无法} {vf;sleep};
+#act {你的精力太低了。} {#delay {1} {exert recover};};
+#act {^{你的气不够|你现在气血虚浮|你太累了|你的体力不够|你的体力太低}} {
+   #delay {2} {yun recover;};
+};
+
+#class lianxi close;

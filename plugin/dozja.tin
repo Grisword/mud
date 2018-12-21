@@ -1,0 +1,195 @@
+#class dozja open;
+
+#var {zja_node[兰州黄河渡口]} {{id}{2819}{name}{黄河古渡}};
+#var {zja_node[大轮寺]} {{id}{2094}{name}{大轮寺山门}};
+#var {zja_node[凌霄城]} {{id}{2220}{name}{桥头}};
+#var {zja_node[嘉兴]} {{id}{6090}{name}{嘉兴城}};
+#var {zja_node[古墓派]} {{id}{1529}{name}{断龙石}};
+#var {zja_node[洛阳]} {{id}{1183}{name}{洛阳中心广场}};
+#var {zja_node[华山村]} {{id}{611}{name}{打谷场}};
+#var {zja_node[麒麟村]} {{id}{2026}{name}{小广场}};
+#var {zja_node[成都]} {{id}{6340}{name}{总督府门前}};
+#var {zja_node[峨眉山]} {{id}{6399}{name}{山门}};
+#var {zja_node[昆明]} {{id}{6684}{name}{中心广场}};
+#var {zja_node[江州]} {{id}{5710}{name}{中央广场}};
+#var {zja_node[建康府朝阳门]} {{id}{5626}{name}{朝阳门}};
+#var {zja_node[长安金光门]} {{id}{788}{name}{金光门}};
+#var {zja_node[长安通化门]} {{id}{693}{name}{通化门}};
+#var {zja_node[长安明德门]} {{id}{718}{name}{明德门}};
+#var {zja_node[大理城]} {{id}{6591}{name}{中心广场}};
+#var {zja_node[昆明苗疆入口]} {{id}{6697}{name}{苗岭边缘}};
+#var {zja_node[燕子矶]} {{id}{5109}{name}{燕子矶}};
+#var {zja_node[汝州]} {{id}{1320}{name}{汝州城}};
+#var {zja_node[北京北永安门]} {{id}{2966}{name}{永安门}};
+#var {zja_node[北京广安门]} {{id}{2960}{name}{广安门}};
+#var {zja_node[曲阜]} {{id}{1708}{name}{鼓楼}};
+#var {zja_node[濮阳]} {{id}{2972}{name}{濮阳}};
+#var {zja_node[灵州]} {{id}{1960}{name}{城中心}};
+#var {zja_node[建康府正阳门]} {{id}{5650}{name}{正阳门}};
+#var {zja_node[建康府神策门]} {{id}{5604}{name}{神策门}};
+#var {zja_node[扬州]} {{id}{45}{name}{中央广场}};
+#var {zja_node[泰山]} {{id}{1745}{name}{岱宗坊}};
+#var {zja_node[归云庄]} {{id}{5942}{name}{归云庄大门}};
+#var {zja_node[陆家庄]} {{id}{6101}{name}{陆家庄}};
+#var {zja_node[荆州长江渡口]} {{id}{307}{name}{陵矶}};
+#var {zja_node[北京德胜门]} {{id}{3156}{name}{德胜门}};
+#var {zja_node[明州府]} {{id}{6169}{name}{庆元港}};
+#var {zja_node[岳阳长江渡口]} {{id}{5127}{name}{陵矶}};
+#var {zja_node[岳阳]} {{id}{5143}{name}{城中心}};
+#var {zja_node[信阳长江渡口]} {{id}{298}{name}{长江渡口}};
+#var {zja_node[淮北]} {{id}{1326}{name}{淮北}};
+#var {zja_node[天龙寺]} {{id}{6514}{name}{瑞鹤门}};
+#var {zja_node[镇江]} {{id}{5759}{name}{广场}};
+#var {zja_node[星宿海]} {{id}{4270}{name}{巨岩}};
+#var {zja_node[张家口]} {{id}{3605}{name}{广场}};
+#var {zja_node[南阳]} {{id}{1332}{name}{南阳}};
+#var {zja_node[信阳]} {{id}{187}{name}{小广场}};
+#var {zja_node[苏州]} {{id}{5829}{name}{沧浪亭}};
+#var {zja_node[镇江长江渡口]} {{id}{5100}{name}{长江渡口}};
+
+#alias {log_to_do} { 
+	#format time {(%t)} {%H:%M:%S};
+      #system {echo -n "$time %1" >> quest_"$charid".log};
+};
+
+#alias {zja.goto} {
+	#var node %1;
+	#if { $zja_node[$node][id] > 0 } {
+		#var dst_name $zja_node[$node][name];
+		gps.fly.go 5462 $zja_node[$node][id]; 
+	} {
+	  	#if { "$node" == "临安府" } {
+            	l <node>;
+            } {
+                  #showme 未登记的node;
+            };
+      };
+};
+
+#alias {zja.start} {
+	ask zhang about job;
+	#var dojob 1;
+};
+
+#act {抵达目标地点：%1} {
+	#var tmp %1;
+	#if {"$tmp"== "大理寺临安府"} { give zhang core;};
+      #elseif {"$tmp"== "$zja_node[$node][name]"}  {#delay {2} {l <node>}};
+	#else {hp};	 
+};
+
+#action {张金鳌说道：「你去到%1之后缓行(walk)%2步当可发现我留下的线索，一切自有分晓。」} {
+	#if { "$dojob" == "1" } { 
+		#var dojob 2;
+		#var place %1;
+		#var zja_step @convert{%2};
+		#showme $place $zja_step;	
+		log_to_do {ZJA: $place $zja_step};		
+		zja.goto $place;
+	};
+};
+
+#action {~\e[1;37m│\e[2;37;0m\e[1;33m\e[2;37;0m%1\e[2;37;0m%s\e[2;37;0m\e[1;37m│\e[2;37;0m\e[1;33m%3%s\e[2;37;0m\e[1;37m│\e[2;37;0m} {
+	#var zja_direct_ch %1;
+	#var zja_direct %3;
+	log_to_do {ZJA: $place $zja_step $zja_direct_ch $zja_direct};	
+	walk_to_clue;
+};
+
+#alias {walk_to_clue} {
+	set walk_speed 2;
+	#math delay_time {$zja_step*2-1};
+	#showme {步行前往线索地点.....};
+	walk $zja_direct;
+	#delay {$delay_time} {walk -p};
+};
+
+#action {你揉揉眼睛仔细一看，这似乎就是张金鏊提到的线索？} {
+	get xian suo;
+	#delay {2} {l xian suo};
+};
+
+
+#action {这是一张纸，似乎是张金鏊提到的线索，木人似乎就在%1附近，去拆了它吧。} {
+	#var zja_dst %1;
+	log_to_do { 木人地址：%1};
+};
+
+#action {你减缓真气运行，让气血运行恢复正常。} {
+	#if { "$dojob" == "2" } { #delay {1} {yun qi};};
+};
+
+#action {你获得了一枚机关核心，可以回去交任务了。} {
+	#var dojob 3;
+};
+
+#function tolist {
+        #var list {{一}{1}{二}{2}{三}{3}{四}{4}{五}{5}{六}{6}{七}{7}{八}{8}{九}{9}{十}{10}{百}{100}{千}{1000}{万}{10000}};
+        #var i 0;
+        #var num {};
+        #parse %1 tmp {
+                #if {$i < 1} {
+                        #var tmp2 $tmp;
+                        #math i {$i + 1};
+                };
+                #else {
+                        #var tmp2 $tmp2$tmp;
+                        #var i 0;
+                        #var num {$num$tmp2;};
+                };
+        };
+        #foreach $num t {
+                #list result add $list.$t;
+        };
+};
+
+#function delzero {
+        #var result %1;
+        #replace result {零} {};
+};
+
+#function tonum {
+        #var tmp %1;
+        #replace tmp {"} {};
+        #list tmp size len;
+        #math result 0;
+        #loop {1} {$len} {i} {
+                #math j {$i % 2};
+                #if {$j} {
+                        #math tmp1 {$tmp.$i};
+                        #if {$i < $len} {
+                                #math k {$i + 1};
+                                #math tmp2 {$tmp.$k};
+                                #if {$tmp1 == 10} {#math tmp3 {$tmp1 + $tmp2}};
+                                #else {#math tmp3 {$tmp1 * $tmp2}};
+                        };
+                        #else {
+                                #math tmp3 $tmp1;
+                        };
+                        #math result {$result + $tmp3};
+                };
+        };
+};
+
+#function convert {
+        #var chs %1;
+        #var chs @delzero{$chs};
+        #regexp $chs {%*万%*} {
+                #var chs1 @tolist{&1};
+                #var chs1 @tonum{"$chs1"};
+                #math num1 {$chs1 * 10000};
+                #if {"&2" == ""} {
+                        #var result $num1;
+                };
+                #else {
+                        #var chs2 @tolist{&2};
+                        #var num2 @tonum{"$chs2"};
+                        #math result {$num1 + $num2};
+                };
+        } {
+                #var chs @tolist{$chs};
+                #var result @tonum{"$chs"};
+        };
+};
+
+#class dozja close;
