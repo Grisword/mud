@@ -1,0 +1,70 @@
+#class banggong open;
+#alias {find.stop} {#var not_here 1;#delay {4} {#class find.inner kill};};
+#alias {find.start} {#var not_here 0;find.go 1};
+#alias {find.go} {
+        #var cmd %1;
+        #if { "$cmd" == "1" } {bhfind} {bhmove $cmd};
+
+        #var num 1;
+        #var target 0;
+        #var start 0;
+        #var cmd 0;
+		#var redo 0;
+
+        #class find.inner open;
+
+		#act {这里不是你要寻找帮派资材的地方。} {
+				#var not_here 1;
+		};
+
+        #act {^{[█\s]+}$} {
+                #math num {$num+1};
+				#nop #showme $num;
+        };
+
+        #act {^{[█\s]*}♀{[█\s]*}$} {
+                #var start $num;
+                #math num {$num+1};
+				#showme $start;
+        };
+
+        #act {^{[█\s]*}★{[█\s]*}$} {
+				#var target $num;
+                #math num {$num+1};
+				#showme $target;
+        };
+
+        #act {★{[█\s]*}♀} {
+                #var cmd {w};
+        };
+
+        #act {♀{[█\s]*}★} {
+                #var cmd {e};
+        };
+
+		#act {你现在搜索的位置似乎有些帮派资材，可以用bhgather命令采集。} {
+				#var cmd {bhgather};
+		};
+
+		#act {看你手忙脚乱的！不用这么着急的。} {
+				#var redo 1;		
+		};
+
+        #delay {3} {
+                #showme $cmd $start $num $target;
+                #if { "$cmd" == "0" } {
+                        #if { $start < $target } {#var cmd s;} {#var cmd n;};
+						#if { "$start" == "0" && "$target" == "0" } {#var not_here 1;}; 
+				};
+				#if { "$not_here" == "1" } {
+						#showme 出问题了...再仔细找找地方.....;
+						#if { "$redo" == "1" } {find.start};
+				} {
+						#if { "$cmd" != "bhgather" } {#var cmd {find.go $cmd};}  {#showme 任务完成，yeah！;};
+						#showme $cmd;
+						$cmd;
+				};
+        };
+        #class find.inner close;
+};
+#class banggong close;
