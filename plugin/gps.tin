@@ -1,5 +1,7 @@
 #class gps open;
 
+#var gps_done_action {};
+
 #alias {INVOKE} {
 	#var gps_status 0;
 	#script {file_name} $cmd;
@@ -13,8 +15,30 @@
 	};
 };
 
+#alias {gps.change_src} {
+	#switch {"${pos.area}${pos.room}"}{
+            #case {"桃源黑沼" } {s;e;n;w;s;s;w;out;};
+		#case {"杭州提督府花园"} {cross_tdf};
+		#default {
+			#list tmp_exits create {${pos.exits}};
+			#list {tmp_exits} {get} {1} {tmp_go};
+			$tmp_go;
+		};
+	};	
+
+	#if { "$tmp_time" == "$max_time"  } {
+		#showme 尝试${max_time}后仍然定位不到位置，请手动检查。;
+	} {
+		#math tmp_time {$tmp_time+1};
+		#delay {2} {gps.fly $dst_name;};
+	};	
+};
+
+
 #alias {fly} {
 	#var dst_name %1;
+	#var max_time 5;
+	#var tmp_time 0;
 	#if { "$dst_name" == "" } {
 		#showme 请输入目标地址：（例如） 少林寺方丈楼;
 	} {
@@ -23,7 +47,8 @@
 };
 
 #alias {gps.fly} {		
-	gps.check_dst %1;
+	#var tmp_dst %1;
+	gps.check_dst $tmp_dst;
 	#if { "$gps_status" == "0" } {
 		#if { "$dst_num" != "1" } {#showme 目标地址不唯一，选择第一个符合条件的房间执行;};
 		gps.check_src {gps_check_room_done};
@@ -35,6 +60,7 @@
 		#if { "$gps_status" == "0" } {
 			#if { $src_num > 1 } {
 				#showme 源地址不唯一，选取第一个合适的房间执行;
+				gps.change_src;
 			}{
 				gps.fly.go $src_roomno $dst_roomno;
 			};
@@ -83,6 +109,11 @@
 	};
 };
 
+#act {频繁使用此命令会对系统造成很重负担，请稍等。} {
+	#delay {1.5} {
+		walk path;
+	};
+};
 
 #alias {gps.walkpath} {
 	#alias tmp_walk #cr;
@@ -91,7 +122,7 @@
 	#if { "$new_path" == "" } {
 		tmp_walk;
 	} {
-		#delay {2} {
+		#delay {0.5} {
 			set walk_path $new_path;
 			set walk_speed -1;
 			walk path;
@@ -101,6 +132,9 @@
 
 	#alias {gps_walk_done} {
 		#showme 抵达目标地点：$dst_name;
+		#delay {2} {
+			$gps_done_action;
+		};
 	};
 
 	#action {你的自建路径行走到达了终点。} {
@@ -138,15 +172,15 @@
 #alias {clear} {
 	yun qi;
 	yun powerup;
-    	kill %0;
+    	killall %0;
     	#class clear.inner open;
-    	#action {^这里没有这个人} {
-        	#unaction {^这里没有这个人};
+    	#action {^你想杀谁？} {
+        	#unaction {^你想杀谁？};
         	#class clear.inner kill;
         	#showme clear: done;
     	} {1};
 	#ticker {kill} {
-        	kill %0;
+        	killall %0;
     	} {3};
     	#class clear.inner close;
 };
@@ -176,7 +210,7 @@
 #alias {gps.wait} {
     #var next_action %1;
     #class gps.action.inner open;
-    #action {^{你的动作还没有完成，不能移动。|你走着走着就陷进了一处沼泽当中，艰难地从沼泽中拔出来。|你小心翼翼往前挪动，遇到艰险难行处，只好放慢脚步。|你还在山中跋涉，一时半会恐怕走不出这藏边群山！|青海湖畔美不胜收，你不由停下脚步，欣赏起了风景。|你还在山中跋涉，一时半会恐怕走不出这西南地绵绵群山！|你还在山中跋涉，一时半会恐怕走不出这六盘山！}} {
+    #action {^{荒路几乎没有路了，你走不了那么快。|吊桥还没有升起来，你就这样走了，可能会给外敌可乘之机的。|你的动作还没有完成，不能移动。|沙石地几乎没有路了，你走不了那么快。|你走着走着就陷进了一处沼泽当中，艰难地从沼泽中拔出来。|你小心翼翼往前挪动，遇到艰险难行处，只好放慢脚步。|你还在山中跋涉，一时半会恐怕走不出这藏边群山！|青海湖畔美不胜收，你不由停下脚步，欣赏起了风景。|你还在山中跋涉，一时半会恐怕走不出这西南地绵绵群山！|你还在山中跋涉，一时半会恐怕走不出这六盘山！}} {
         #delay {again} {
             ${next_action};
         } {1};
@@ -188,7 +222,7 @@
     #delay {gps_delay} {
         #class gps.action.inner kill;
         gps.run;
-    } {1};
+    } {2};
     #class gps.action.inner close;
 
     ${next_action};
@@ -211,11 +245,131 @@
 				#case {"hh"} {cross_river 过河};
 				#case {"cj"} {cross_river 过江};
 				#case {"boat"} {enter_boat};
+				#case {"qiao"} {guo_qiao};
+				#case {"stiff"} {climb_stiff};
+				#case {"yzbt"} {cross_bt};
+				#case {"zjc"} {cross_zjc};
+				#case {"mantuo"} {cross_mantuo};
+				#case {"zhulou"} {cross_zhulou};
 				#default {zuoche $target};
 			};
 		};
             #case {"delay"} {#delay {%2} {gps.getpath}};
+		#case {"jqg"} {cross_jqg};
+		#case {"ljg"} {cross_ljg};
+		#case {"tdf"} {cross_tdf};
+		#case {"bt_midao"} {cross_bt_midao};
+		#case {"mz"} {
+			#switch {"$target"} {
+				#case {"qu_sibao"} {mz_qu_sibao};
+				#case {"huan_sibao"} {mz_huan_sibao};
+			};
+		};
       }
+};
+
+
+#alias {cross_bt_midao} {
+	#class cross_bt_midao open;
+	#act {你搬动了花盆，只见花盆下面露出一个黑幽幽的洞口。} {
+		#class cross_bt_midao kill;
+		#delay {1} {gps.run};
+	};
+
+	#act {你把花盆搬回了原位。洞口被封住了。} {
+		#delay {1} {move pen};
+	};
+
+	#class cross_bt_midao close;
+	move pen;
+};
+
+#alias {cross_mantuo} {
+	
+	#class cross_mantuo open;
+	#act {不知过了多久，船终于靠岸了，你累得满头大汗。} {
+		#class cross_mantuo kill;
+		#delay {1} {gps.run};
+	};
+
+	#class cross_mantuo close;
+
+	row mantuo;
+};
+
+
+#alias {cross_zhulou} {
+
+	#class cross_zhulou open;
+
+	#act {竹篓里已经有人了，盛不下你。} {
+		#delay {3} {enter lou};
+	};
+
+	#act {^只觉得竹篓一震，原来已经到了崖%*。$} {
+		#class cross_zhulou kill;
+		#delay {1} {gps.run};
+	};
+
+	#class cross_zhulou close;
+
+	enter lou;
+};
+
+#alias {cross_jqg} {
+	$jqg_in;
+	gps.run;
+};
+
+#alias {cross_zjc} {
+
+	#class cross_zjc open;
+
+	#act {^钱老本给了你一个皇宫通行令！$} {
+		#delay {2} {ne;se;#3 n;};
+	};	
+
+	#act {^天安门广场 - } {
+		#class cross_zjc kill;
+		#delay {2} {gps.run};
+	} {4} ;
+
+	#class cross_zjc close;	
+
+	ask qian laoben about 进宫;
+	give 1 gold to qian laoben;
+};
+
+#alias {cross_bt} {
+	
+	#class cross_bt open;
+	#act {你身上没有 gold 这样东西。} {
+		#ticker {qu} {qu 5 gold} {2};
+	};
+
+	#act {你从银号里取出五两黄金。} {
+		#unticker {qu};
+		give 1 gold to qian yankai;
+	};
+
+	#act {^戈壁 - } {
+		#class cross_bt kill;
+		gps.run;
+		
+	} {4};
+
+	#class cross_bt close;
+
+	ask qian yankai about 白驼山;
+	give qian 1 gold;
+};
+
+#alias {cross_ljg} {
+	#act {你终于来到了对面，心里的石头终于落地。} {
+		#unaction {你终于来到了对面，心里的石头终于落地。};
+		gps.run;
+	};
+	zou tiesuo;
 };
 
 #alias {enter_boat} {
@@ -240,13 +394,95 @@
 	#class gps.action.inner close;
 };
 
+#alias {guo_qiao} {
+	#action {你终于一步步的终于挨到了桥头} {
+		#unaction {你终于一步步的终于挨到了桥头};
+		#delay {0.5} {gps.run;};
+	};
+	guo qiao;
+};
+
+#alias {climb_stiff} {
+	#action {^崖间古松} {
+        	#unaction {^崖间古松};
+        	#delay {2} {gps.run;};
+    	};
+	climb stiff;
+};
+
+
+#gag {你不忙};
+#alias {on_unbusy} {
+	#alias tmp_unbusy #cr;
+	#alias tmp_unbusy %0;
+
+	#class unbusy.inner open;
+	#action {^你不忙$} {
+      	#class unbusy.inner kill;
+        	tmp_unbusy;
+    	} {1};
+    	#ticker {checkbusy} {
+      	checkbusy;
+    	} {0.5};
+    	#class unbusy.inner close;
+    	
+	checkbusy;
+};
+
+
+#alias {cross_tdf} {
+	#var current_direction west;
+    	#list tmp_directions create {east;west;north;south};
+    	#alias {do_look_next} {
+      	#math look_count ${look_count}+1;
+        	#if {${look_count} > 4} {
+            	on_unbusy {
+				${next_direction};
+   				do_look;
+            	};
+        	};
+        	#else {
+            	#list tmp_directions get ${look_count} current_direction;
+            	look ${current_direction};
+        	};
+    	};
+
+    	#alias {do_look} {
+      	#class gps.action.inner open;
+      	#var next_direction  west;
+      	#var look_count 0;
+        	#action {这里的花丛（huacong）比别的地方} {
+            	#class gps.action.inner kill;
+            	on_unbusy {
+                		${current_direction};
+                		gps.run;
+            	};
+        	} {8};
+
+		#action {这里看起来似乎和其他地方不太一样} {
+            	do_look_next;
+        	} {8};
+
+        	#action {心里有种不祥的预感} {
+            	#var next_direction ${current_direction};
+            	do_look_next;
+        	} {9};
+        	#class gps.action.inner close;
+	
+		do_look_next;
+    };
+
+    do_look;
+};
+
 
 #alias {cross_river} {
 	#var tmp_word %1;
-	ask shao gong about $tmp_word;
+
+	#class cross_river open;
 	#action {正等着你呢，上来吧。} {#class tmp kill;enter};
 	#action {艄公将一块踏脚板搭上堤岸，} {#class tmp kill;enter};
-	#action {^{%*接过你递给的船资|你的车船通账上还剩%S，这一趟的船资%S。|你吸了口气，一声“船家”，声音中正平和地远远传了出去。|你使出吃奶的力气喊了一声：“船家”}} {
+	#action {^{%*的人，快请上船。|%*接过你递给的船资|你的车船通账上还剩|你吸了口气，一声“船家”，声音中正平和地远远传了出去。|你使出吃奶的力气喊了一声：“船家”}} {
 		#class tmp open;
             #action {^只听得江面上隐隐传来：“别急嘛，这儿正忙着呐……”} {#class tmp kill;#delay {3} {yell boat}};
             #class tmp close;
@@ -259,8 +495,13 @@
             #if {${in_boat} == 1} {
                    #var in_boat 0;
                    out;gps.run;
+			 #class cross_river kill;
 		};
 	};
+	#class cross_river close;
+	
+	ask shao gong about $tmp_word;
+	#delay {2} {yell boat};
 };
 
 
@@ -281,6 +522,81 @@
 };
 
 
+
+#alias {mz_qu_sibao} {
+
+	#class gps.action.inner open;
+	#action {^%d%s《{广陵散|率意帖|溪山行旅图|呕血谱}》$} {
+		#if {@ismember{%%3;sibao_zh} == 0} {
+            	#list sibao_zh add {%%3};
+            	#list sibao add {%%1};
+        	};
+    	};
+
+    	#act {^柜子里目前存放的物品有：$} {
+        	#var sibao {};
+        	#var sibao_zh {};
+        	#delay {1} {
+            	#if {@numitems{sibao}==4} {
+                		#loop 4 1 i {getout @item{sibao;$i}};
+                		#delay 1 {
+					out;south;east;north;north;northwest;west;west;west;southwest;southwest;south;southeast;southwest;
+                		};
+            	};
+            	#else {
+            		#show 你的柜子里四宝不齐或有多余，无法自动前往梅庄。;
+            	};
+        	};
+    	};
+
+ 	#act {^孤山梅庄 - } {
+		#class gps.action.inner kill;
+            #delay {2} {gps.run};
+      } {4} ;
+
+	#act {的储物柜 - [玩家储物柜]$} {
+    		#unact {的储物柜 - [玩家储物柜]$};
+		store ouxue pu;
+    		store xishan tu;
+    		store shuaiyi tie;
+    		store guangling san;
+
+    		find;
+	};
+
+	#class gps.action.inner close;
+
+	enter ${user.id};
+
+};
+
+
+#alias {mz_huan_sibao} {
+	#class gps_huan_sibao.inner open;
+    	#action {^你把身上的《广陵散》拿出来放进柜子里了。} {
+      	#class gps_huan_sibao.inner kill;
+		out;
+		gps.run;
+    	};
+    	#action {^你要把什么放到储藏柜里呢？} {
+        	#class gps_huan_sibao.inner kill;
+    	};
+
+	#act {的储物柜 - [玩家储物柜]$} {
+		#unact {的储物柜 - [玩家储物柜]$};
+		store ouxue pu;
+      	store xishan tu;
+      	store shuaiyi tie;
+      	store guangling san;
+	};
+    	#class gps_huan_sibao.inner close;
+
+	northeast;northwest;north;northeast;northeast;east;east;east;southeast;south;south;west;north;enter ${user.id};
+};
+
+
+
+
 #alias {gps.check_src} {
     	#alias tmp_check_room #cr;
     	#alias tmp_check_room %1;
@@ -293,8 +609,10 @@
 		#if { "${pos.area}" == "建康府南" } {#var pos.area {建康府南城};};
 		#if { "${pos.area}" == "建康府北" } {#var pos.area {建康府北城};};
 		#if { "${pos.area}" == "峨嵋后山" } {#var pos.area {峨眉后山};};
+		#if { "${pos.area}" == "建康府诸军都统制府" } {#var pos.area {都统制府};};
 		#if { "${pos.area}" == "星宿海" } {#var pos.area {星宿};};
 		#if { "${pos.area2}" == "西湖" } {#var pos.area {西湖};};
+		#if { "${pos.area2}" == "提督府" } {#var pos.area {提督府};};
 		#var cmd {php ./bin/get_room.php "${pos.area}${pos.room}" "${user.id}" "${pos.exits}"};
         	INVOKE;
         	#showme $result;
@@ -307,13 +625,19 @@
 
 
 #alias {gps.check_dst} {
-	#var dst_room %1;
-	#replace {dst_room} {荆州的} {襄阳};
-	#var cmd {php ./bin/get_room.php "$dst_room" "${user.id}"};
-	INVOKE;
-      #showme $result;
-	#var dst_num $num;
-	#var dst_roomno  $roomno;
+	#var dst_room %0;
+      #regex {$dst_room} {^%d$} {
+		#var gps_status 0;
+		#var dst_num 1;
+ 		#var dst_roomno  $dst_room;
+      } {
+		#replace {dst_room} {荆州的} {襄阳};
+		#var cmd {php ./bin/get_room.php "$dst_room" "${user.id}"};
+		INVOKE;
+		#regex {$result} {%*|%*|%*} {#var roomlist {&2};#showme 房间数: $num 房间id: $roomlist; } ;
+		#var dst_num $num;
+		#var dst_roomno  $roomno;
+	};
 };
 
 
@@ -324,7 +648,7 @@
     	#var current_room {};
     	#var description {};
     	#class record.inner open;
-    	#action {^%* - $} {
+	#action {^%* -%*$} {
         	#var record_state 1;
         	#var current_room %%1;
         	#if {"${current_room}" == "海中"} {
@@ -397,6 +721,7 @@
         	get_exits_done;
     	} {7};
 
+
     	#alias {get_exits_done} {
         	#var pos.room ${current_room};
         	#var pos.exits ${exits_list};
@@ -407,7 +732,7 @@
     	};
 
     	#class record.inner close;
-    	#send {l};
+    	look;q;
 };
 
 
@@ -436,6 +761,40 @@
     	#class record.inner close;
     	localmaps;
     	q;
+};
+
+#alias {look.all} {l north;l south;l east;l west;}; 
+
+#act {^{石壁上竟是你之前刻上的路线：|你之前刻上的路线是：}} {
+	#nop {	
+	#act {^%S %S %S %S$} {
+		#class gps.jqg.tmp kill;
+		#var jqg_out {@convertjqg{%%4};@convertjqg{%%3};@convertjqg{%%2};@convertjqg{%%1}};
+		#var jqg_in {@convertjqg{%%1};@convertjqg{%%2};@convertjqg{%%3};@convertjqg{%%4}};
+		#showme $jqg_in;
+		#showme $jqg_out;
+	};};
+
+	#act {^%*$} {
+		#unact {^%*$};
+		#var tmpline %%1;
+		#replace {tmpline} { } {;};
+		#replace {tmpline} {前} {move qian};	
+		#replace {tmpline} {后} {move hou};
+		#replace {tmpline} {左} {move zuo};
+		#replace {tmpline} {右} {move you};
+		#var jqg_in $tmpline;
+	};
+
+};
+
+#function {convertjqg} {
+	#switch {"%1"}{
+		#case {"前"} {#return {move qian}};
+		#case {"后"} {#return {move hou}};
+		#case {"左"} {#return {move zuo}};
+            #default {#return {move you}};
+	};
 };
 
 

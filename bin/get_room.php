@@ -12,11 +12,13 @@ $filename="/tmp/data_".$id."_".str_rand(12);
 
 $trans = array(")" => "", 
 		"(" => "",
+		" " => "",
+		"  " => "",
 		"（"=>"" ,
 		"）"=>""," 
 		"=>"",
 		"的"=>"",
-		"白驼" => "白驼山",
+		"白驼山" => "白驼",
 		"华山村" => "小山村",
 		"回族小镇" => "回疆小镇",
 		"镇江府" => "镇江",
@@ -34,6 +36,12 @@ $trans = array(")" => "",
 		"灵鹫宫" => "灵鹫",
 		"全真教" => "全真");
 $t=strtr($t, $trans);
+
+$trans2 = array("正气山庄大门" => "正气山庄的大门",
+		"白驼壁" => "白驼山壁"
+			);
+$t=strtr($t, $trans2);
+
 $db = new SQLite3('bin/maps.db');
 
 $results = $db->query('select * from mud_room where zone||roomname like "%' . $t .'"');
@@ -57,7 +65,9 @@ if ($num == 0) {
 
 $num=0;
 foreach ($rooms as $row) {
-	if( !empty($e) &&  count(array_diff (explode(";", trim($e,";")) , explode(";", trim($row["exits"],";")))) > 0  ) continue;
+	$tmp_dir_a=explode(";", trim($e,";"));
+	$tmp_dir_b=explode(";", trim($row["exits"],";"));
+	if( !empty($e) &&  ( count(array_diff ($tmp_dir_a , $tmp_dir_b)) > 0  ||  count($tmp_dir_a) != count($tmp_dir_b) )  ) continue;
 	$no[]=$row["roomno"];
 	$name[]=iconv("UTF-8","GBK",$row["roomname"]);
 	$num++;
@@ -66,7 +76,7 @@ foreach ($rooms as $row) {
 if ( $num > 0 ) {
 	$output= "#var result {". $num."|".implode(";", $no). "|" . implode(";", $name) ."};\n";
 	$output .= "#var num {" . $num ."};\n" ;
-	$output .= "#var roomno {" . $rooms[0]["roomno"] ."};\n" ;
+	$output .= "#var roomno {" . $no[0] ."};\n" ;
 	file_put_contents($filename, $output);
 	print $filename;
 }
