@@ -1,0 +1,157 @@
+#class syq open;
+
+#alias {job.show} {
+      #showme syq任务：%0;
+      #var myid {${user.id}-${user.name} 谍报任务：%0 };
+      hp;
+};
+
+
+#alias {mark.find} {
+
+	#var mark_line 0;
+	#list mark_list clear;	
+	#var mark {};
+	#class mark.find open;
+	#act {~^\e[%%1m▇\e[2;37;0m\e[%%2m▇\e[2;37;0m\e[%%3m▇\e[2;37;0m\e[%%4m▇\e[2;37;0m\e[%%5m▇\e[2;37;0m$} {
+		#var tmp_num 0;
+		#math mark_line {$mark_line+1};
+		#if { "%%1" != "37" } {#math tmp_num {$tmp_num+10000}};
+		#if { "%%2" != "37" } {#math tmp_num {$tmp_num+1000}};
+		#if { "%%3" != "37" } {#math tmp_num {$tmp_num+100}};
+		#if { "%%4" != "37" } {#math tmp_num {$tmp_num+10}};
+		#if { "%%5" != "37" } {#math tmp_num {$tmp_num+1}};
+		#list mark_list add {$tmp_num};
+		#if { "$mark_line" == "5" } {
+			#class mark.find kill;
+			#list {mark_list} {simplify} {mark};
+			#showme $mark;
+			#if { "$mark" == "$src_mark" } {#var need_stop 1;};
+		};
+	};
+	#class mark.find close;
+	look;
+};
+
+#alias {job.pic} {
+	#var src_mark $mark;
+	#var job_zone %1;
+	#class syq.start kill;
+	job.go $job_zone;
+	job.show 任务地点：$job_zone;
+};
+
+#alias {job.start} {
+	#var src_mark {};
+	mark.find;
+
+	#class syq.start open;
+	#act {你向宋远桥打听有关『job』的消息。} {
+		#var job_status 1;
+	};	
+
+	#act {宋远桥说道：「殷六弟的伤势又有反复，你去%%1看看，能不能找到伤药吧。」} {
+		#if { "$job_status" == "1" }  {
+			#var job_zone %%1;
+			#delay {1} {pro get_mark;};
+		};
+	};
+
+	#act {get_mark并不是一个北侠的职业，目前没有相关的信息。} {
+		#var src_mark $mark;
+		#class syq.start kill;
+		job.go $job_zone;
+		job.show 任务地点：$job_zone;
+	};
+	#class syq.start close;
+
+	ask song about job;
+};
+
+#act {%1突然从旁边走了过来，一把拿起伤药。} {
+	#var npc_name %1;
+	#class syq.tmp open;
+	#act { %%S(%%w %%w)$} {
+            #format npc {%l %l} %%2 %%3;
+		#if { "%%1" == "$npc_name" } {
+			#class syq.tmp kill;
+			yun qi;yield yes;pu;ask $npc about 伤药;yes;
+		};	
+	};
+
+	#class syq.tmp close;
+	
+	look;
+};
+
+#act {说道：「好吧，这么耐打的人我也是服了，伤药是你的了。」} {
+	yield no;
+	#var gps_done_action {give song yao cai};	
+	#delay {2} {fly 473};
+};
+
+
+#alias {syq.search} {
+      #var dst_area %1;
+      #var find_mark 0;
+      #list search_path create $db_path[$dst_area][path];
+      #var search_step 1;
+      #list search_path size bl_num;
+      #var search_action {pro 遍历搜索};
+      #showme 开始遍历：${dst_area}。一共需要执行${bl_num}步。;
+	#var need_stop 0;
+      #class syq.search open;
+
+      #alias {search.next} {
+            #var need_stop 0;
+            #if { $search_step > $bl_num } {
+
+                  #if { "$db_path[$dst_area][next]" != ""  } {
+                        #var gps_done_action {syq.search $db_path[$dst_area][next];};
+                        fly $db_path[$db_path[$dst_area][next]][start];
+                  } {
+                        #class syq.search kill;
+                        #showme 遍历完成，目标没有找到;
+                        #var gps_done_action {};
+                  };
+            } {
+                  #list search_path get $search_step tmp_dir;
+			#math search_step {$search_step+1};
+                  $tmp_dir;
+			mark.find;
+                  $search_action;
+            };
+      };
+
+      #act {^遍历搜索并不是一个北侠的职业，目前没有相关的信息。$} {
+            #delay {1} {
+                  #if { "$need_stop" == "1" } {
+				#class syq.search kill;
+				#show 搜索遍历目标地址找到;		
+				#var gps_done_action {};
+				#delay {1} {guancha};
+			} {search.next;};
+            };
+      };
+
+      #class syq.search close;
+
+      mark.find;
+      $search_action;
+};
+
+
+
+#alias {job.go} {
+      #var bl_zone %1;
+      #format {bl_area} {%L} {$db_path[${bl_zone}][start]};
+      #if { $bl_area < 2 } {
+            #showme 未知的遍历地点，请补充遍历路径;
+      } {
+            #var gps_done_action {syq.search ${bl_zone};};
+            fly $db_path[${bl_zone}][start];
+      };
+};
+
+
+#class syq close;
