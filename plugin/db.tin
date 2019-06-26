@@ -1,0 +1,243 @@
+#class db open;
+
+#alias {db.stop} {#class db kill};
+
+#var job_status 0;
+#alias {job.start} {
+      ask yu jie about job;
+	#ticker {chifan} {drink soup;eat liang};
+};
+
+#alias {job.done} {
+      #untick {hp};
+      #untick {chifan};
+      #untick {stbar};
+	#var gps_done_action {};
+      ask yu jie about finish;
+};
+
+#act {^这是你完成的第%1次谍报任务。} {
+	#delay {3} {job.start};
+};
+
+#act {你向余玠打听有关『job』的消息。} {
+      #var job_status 1;
+};
+
+#act {余玠说道：「暂时也没什么事情要你去办。」} {
+	#if { "$job_status" == "1" } {
+		#var job_status 0;
+		#delay {10} {job.start};
+	};
+};
+
+#alias {job.show} {
+      #showme 谍报任务：%0;
+      #var myid {${user.id}-${user.name} 谍报任务：%0 };
+      hp;
+};
+
+#alias {job.ask} {
+	#var job_ask 1;
+	ask %1 about 接头;
+};
+
+#act {余玠在你的耳边悄声说道：%1我只能告诉你某人在%2等着你。} {
+      #if { "$job_status" == "1" } {
+            #var job_zone %2;
+            #var job_status 2;
+            job.show 接头区域($job_zone);
+
+		#act {长相大致如下%%1。} {
+			#var job_look %%1;
+			#unact {长相大致如下\%%1。};
+		};
+
+		dbbl.go ${job_zone};
+      };
+};
+
+#act {%1在你的耳边悄声说道：有人在%2给你留下了下一步行动的步骤。} {
+	#var job_ask 0;
+      #if { "$job_status" == "2" } {
+            #class dbbl kill;
+		#var job_status 3;
+            #var job_board %2;
+            job.show 留言板 ($job_board);
+		#format {bb} {%L} {$board["$job_board"]};
+		#if { "$job_board" == "扬州的扬州城人物侦测报告" } {
+			#var gps_done_action {l report;q;};
+		} {
+			#var gps_done_action {l board;q;};
+		};
+		#if { $bb < 2 } {
+			#showme 未知的留言板，请补充地点;
+		} {
+			#delay {2} {fly $board["$job_board"];};
+		};
+      };
+};
+
+#act {[%1]  %2钧鉴%*知名不具} {
+	#if { "%2" == "${user.name}" } {db.read %1;};
+} {4};
+
+#alias {db.read} {
+      #class db.read open;
+      #act {read并不是一个北侠的职业，目前没有相关的信息。} {
+            #class db.read kill;
+		db.getinfo $msg;
+      };
+	
+      #act {^%*$} {
+		#format {x} {%L} {%%0};
+		#if { $x > 25 } { #var msg %%0;};
+      } {9};
+
+      #class db.read close;
+
+      read %1;
+      pro read;
+};
+
+
+#alias {db.getinfo} {
+	#var job_status 4;
+	#var string %0;
+	#var cmd {php ./bin/get_diebao.php "$string" "${user.id}" };
+      #nop {#showme $cmd;};
+      INVOKE;
+	#if { "$db_num" == "1" } {
+		job.show 地点：$db_info[2]  人物：$db_info[3]  暗号：$db_info[4];
+		#var gps_done_action {db.anhao};
+		#if { "$job_board" == "少林寺的少林风波录" } {s};
+		#delay {2} {db.go};
+	} {
+		#showme 留言信息：$string;
+		#showme 找不到合适的信息，请检查代码;
+	}; 
+};
+
+#alias {db.board} {fly $board["$job_board"]};
+#alias {db.go} {
+	#list room_ids clear;
+	fly $db_info[2];
+	#var search_step 1;
+	#if { $dst_num > 1 } {
+		#list room_ids create {$roomlist};
+	};
+};
+
+#act {keep_going并不是一个北侠的职业，目前没有相关的信息。} {
+	#var pre_step $search_step;
+	#math search_step {$search_step+1};
+	#if { "$dst_num" == "1" || $search_step > $dst_num  } {
+		#showme 找完所有的地方，木有找到;
+      } {
+		#list {room_ids} {get} {$pre_step} {src_room_id};
+		#list {room_ids} {get} {$search_step} {dst_room_id};
+		gps.fly.go $src_room_id $dst_room_id;	
+	};
+};
+
+
+#alias {db.anhao} {
+
+	#var find_npc 0;	
+	#class db.anhao open;
+	#act { %%S(%%2)$} {
+		#if { "%%1" == "$db_info[3]" } {
+			#var find_npc 1;
+			say $db_info[4];yun qi;pu;
+			#var gps_done_action {job.done};
+		};
+	};
+
+	#act {」%%S(%%2)$} {
+            #if { "%%1" == "$db_info[3]" } {
+			#var find_npc 1;
+                  say $db_info[4];yun qi;pu;
+                  #var gps_done_action {job.done};
+            };
+      } {4};
+
+	#act {search_db并不是一个北侠的职业，目前没有相关的信息。} {
+		#class db.anhao kill;
+		#if { "$find_npc" == "0"  } {
+			#delay {0.5} {pro keep_going;}
+		};
+			
+	};
+	
+	#class db.anhao close;
+	look;
+	pro search_db;
+};
+
+#act {周围有%*个人围了上来。$} {
+	#var job_status 4;
+	db.fight;
+};
+	
+#alias {db.fight} {
+
+	#class db.fight open;
+	#act {^看起来%%1想杀死你！$} {
+		#if { "%%1" != "江耀亭" } {
+			#list {killer_list} {add} {%%1};
+		};
+	};
+
+	#act {^%%1死了。$} {
+		#list {killer_list} {find} {%%1} {killer_index};
+		#list {killer_list} {delete} {$killer_index};
+		#list {killer_list} {size} {killer_num};
+		#showme $killer_num;
+
+		#if { "$killer_num" == "0" } {
+			#class db.fight kill;
+			job.show 谍报任务完成，去找老板领赏;
+			fly 四川总督府;
+		};
+	};
+
+	#class db.fight close;
+
+	#list {killer_list} {clear};
+	hp;
+
+};
+
+
+#var board["日月神教的异闻录"] {8102};
+#var board["洛阳的天地会弟子留言板"] {1250};
+#var board["白驼山的白驼山弟子留言板"] {2358};
+#var board["扬州的发呆店留言板"] {48};
+#var board["扬州的正气山庄留言版"] {"扬州的正气山庄"};
+#var board["扬州的客店留言板"] {"扬州客店"};
+#var board["明教的明教留言版"] {"明教大殿"};
+#var board["绝情谷的忘情石"] {2452};
+#var board["古墓的古墓派留言簿"] {"古墓石厅"};
+#var board["星宿的星宿派弟子留言板"] {4283};
+#var board["洛阳的侠客行江湖风云录"] {"望星楼"};
+#var board["扬州的征婚启事"] {"红娘庄大门"};
+#var board["大轮寺的大轮寺留言版"] {"殿前广场"};
+#var board["扬州的丐帮弟子留言板"] {"扬州土地庙"};
+#var board["归云庄的归云庄留言簿"] {"归云庄归云亭"};
+#var board["扬州的扬州城人物侦测报告"] {"林间小屋"};
+#var board["铁掌峰的临安府剿匪英雄录"] {"铁掌峰山脚下"};
+#var board["天地会"] {"洛阳城侧厅"};
+#var board["灵鹫的灵鹫宫留言版"] {"独尊厅"};
+#var board["少林寺的少林风波录"] {"少林寺广场"};
+#var board["北京的留言板"] {"北京诚意客栈"};
+#var board["全真的全真留言版"] {"全真宫门"};
+#var board["杀手帮的杀手帮留言板"] {"杀手帮杀手帮广场"};
+#var board["姑苏慕容的燕子坞留言牌"] {"慕容客厅"};
+#var board["天龙寺的天龙寺留言簿"] {"天龙寺三元宫"};
+#var board["神龙岛的神龙岛留言板"] {"神龙岛峰顶"};
+#var board["凌霄城的凌霄城留言板"] {"凌霄城凌霄大厅"};
+#var board["武当山的神武功德录"] {"三清殿"};
+#var board["大理城中的王府告示牌"] {"大理城中王府大门"};
+
+
+#class db close;

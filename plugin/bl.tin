@@ -1,0 +1,354 @@
+#class bl open;
+
+#var db_path[明州] {{start}{6169}{path}{s;w;w;w;w;e;e;e;n;s;e;s;e;w;s;se;se}};
+#var db_path[铁掌峰] {{start}{5224}{path}{nu;nu;nu;nu;ne;nu;ne;nu;n;n;n;n;n;nu;sd;s;s;s;s;s;sd;sw;e;w;nw;nu;sd;se;n;s;sd;e;w;sw;nw;se;sd;sd;sd;sd;se;e;ne;n;s;sw;w;nw}};
+#var db_path[大轮寺] {{start}{2133}{path}{nu;e;s;n;w;n;s;w;s;n;e;sd;s;{open door};out;su;wd;s;eu;ed;e;w;n;e;w;s;s;wu;sd;e;e;w;w;{pull gate};sd;e;w;se;wd;nw;sw;drink;sd;w;e;ed;eu;ed;se;e;sw;se;e;e;e;s;s;s;e;w;n;e;w;w;e;n;e;w;w;e;n;e;w;n;w;e;e;w;n;ne;e;nd;e;n;w;n;e;w;w;s;s;n;n;e;s;e;s;w;su;w;sw;s;s;w;w;n;s;w;nw;ne;s;n;n;s;w;nw;wu;ed;e;nu;{jump spring};{jump out};ne;se;eu;ed;ne;sw;se;nw;wu;nw;{knock gate};nu;w;n;w;e;s;w;e;e;nu;ed;e;e;w;w;n;wu;wd;w;e;n;eu;nd}};
+#nop {{s;s;s;e;w;n;e;w;w;e;n;e;w;w;e;n;e;w;n;w;e;e;w;n;ne;e;nd;e;n;w;n;e;w;w;s;s;n;n;e;s;e;s;w;su;w;sw;s;s;w;w;n;s;w;nw;ne;s;n;n;s;w;nw;wu;ed;se;e;sw;se;e;e;e}};
+#var db_path[成都] {{start}{四川总督府}{path}{out;n;e;w;w;e;n;e;w;w;e;n;n;nu;sd;s;s;w;s;nw;n;s;s;n;w;w;e;e;se;se;s;s;e;w;w;nw;se;e;s;w;e;s;su;su;su;nd;nd;sw;sw;ne;ne;nd;n;n;n;e;n;s;se;n;s;e;e;w;w;nw;nw}};
+#var db_path[中原] {{start}{南阳城}{path}{n;n;n;n;s;s;s;s;w;u;d;e;nw;se;e;u;d;w;ne;ne;nw;nw;se;se;sw;sw;ne;ne;n;s;s;s;s;n;n;n;e;se;e;ne;ne;ne;sw;sw;sw;se;se;se;nw;nw;nw;w;nw;w;sw;sw}};
+#var db_path[曲阜] {{start}{孔庙}{path}{enter;out;e;s;s;s;s;s;n;n;n;n;w;w;n;n;w;w;sw;sw;sw;ne;ne;ne;e;e;n;e;e;n;n;nw;nw;nw;se;se;se;s;s;s;e;n;s;w;s;e;ne;eu;enter;out;wd;sw;w;w}};
+#var db_path[信阳] {{start}{信阳小广场}{path}{s;w;e;s;s;sd;se;s;n;nw;nu;n;n;n;w;s;n;n;s;w;w;nw;se;e;e;e;n;n;n;n;n;n;s;s;s;s;s;s;e;e;e;e;se;sd;nu;nw;e;se;nw;w;w;w;w;w}};
+#var db_path[泰山] {{start}{泰山玉皇顶}{path}{w;nu;sd;e;u;w;e;e;w;d;ed;eu;e;{ask mao about 老朋友};n;w;s;s;e;e;n;n;w;s;s;sd;w;wd;wu;sd;sd;sd;sd;sd;sd;sd;wd;sd;sd;sd;s;s;sw;w;sw;ne;e;ne;n;n;nu;nu;nu;eu;nu;nu;nu;nu;nu;nu;eu;ed;nu;sd;wu;eu;e;ed;wu;e;ne;sw;w;wd;wd}};
+#var db_path[长江] {{start}{5130}{path}{se;e;e;e;e;ne;ne;ne;ne;e;e;se;se;se;e;ne;ne;ne;e;e;e;e;se;e;e;e;e;e;se;se}};
+#var db_path[长江北岸] {{start}{310}{path}{se;e;e;e;e;ne;ne;ne;ne;e;e;se;se;se;e;ne;ne;ne;e;e;e;e;se;e;e;e;e;e}};
+#var db_path[嘉兴] {{start}{嘉兴城}{path}{n;n;s;s;s;s;n;n;w;nu;nw;nw;n;s;se;se;sd;e;s;sw;w;nw;se;e;sw;e;w;s;enter;enter;s;n;out;out;n;ne;ne;ne;n;e;n;s;s;s;n;n;e;w;se;ne;sw;s;u;enter;out;d;n;nw;nd;w;e;{ask diao about 独孤求败};nu;se;nw;sd;sd;e;e;e;e;n;s;s;s;se;nw;n;n;w;w;w;w;su;e;{jump jiang};{jump out};w;w}};
+#var db_path[泉州] {{start}{泉州城中心}{path}{s;s;e;e;w;w;n;n;w;nw;w;e;se;n;s;s;n;w;e;e;e;s;n;n;s;ed;n;s;s;n;wu;w;n;n;n;s;s;s;e;ne;ne;ne;n;w;e;n;ne;sw;s;s;sw;sw;sw;w}};
+#var db_path[江州] {{start}{江州中央广场}{path}{s;e;e;w;w;s;e;w;s;n;w;n;sw;ne;n;s;ne;n;s;s;n;ne;n;w;enter;e;w;w;e;out;e;n;s;e;s;n;ne;se;nw;nw;w;e;se;ne;ne;u;d;e;ne;u;d;n;s;sw;w;sw;sw;sw;sw;s;s;s;s;s;e;sw;se;s;n;nw;nd;n;n;n;n;n;sw;sw;sw;w;wu;nw;se;ed;e;ne;ne;ne;ne;ne;ne;e;e;ne;eu;ed;ed;wu;wu;wd;sw;w;w;sw;sw;sw}};
+#var db_path[牙山] {{start}{牙山湾中心}{path}{n;w;e;e;w;n;s;s;e;n;s;e;n;s;e;w;w;w;s;w;e;e;w;s;w;e;e;w;s;n;n;n;w;n;s;s;n;w;s;n;w;w;w;w;w;sw;sw;w;sw;ne;e;ne;ne;e;e;e;e;e;e;e}};
+#var db_path[临安府] {{start}{临安府大理寺}{path}{e;n;s;w;w;n;s;s;n;w;w;e;e;e;n;w;e;e;s;n;n;s;w;n;w;e;n;n;n;ne;sw;s;s;s;e;e;e;s;w;e;s;w;e;s;e;n;s;s;n;e;e;e;ne;e;ne;sw;w;sw;w;w;w;w;w;w;n;enter;n;w;e;n;s;e;w;s;out;s;s;enter;w;e;sw;u;d;ne;s;s;n;n;se;nw;e;w;out;n;w;w;se;w;enter;out;s;w;nw;n;{say 红花老祖本姓朱，为救苍生下凡来};enter;n;s;out;s;se;sw;ne;e;s;n;e;e;w;s;e;w;w;n;s;s;w;e;n;e;s;e;s;w;w;n;sw;up;d;se;e;s;su;wu;ed;nd;n;w;n;e;n;n;n;nw}};
+#var db_path[西湖] {{next}{红花会}{start}{西湖段家桥}{path}{n;s;sw;ne;s;sw;sw;sw;nw;n;w;s;se;e;w;s;se;e;w;nw;n;nw;n;e;ne;ne}};
+#var db_path[红花会] {{start}{6322}{path}{e;s;e;n;n;w;e;s;e;s;n;n;s;e;e;s;n;n;s;e;e;n;e}};
+#var db_path[福州] {{start}{福州城中心}{path}{n;w;e;e;w;n;n;nu;nw;nw;se;se;sd;s;s;s;e;s;n;e;w;n;n;s;s;w;s;s;n;w;n;n;enter;{break men};n;d;d;u;u;{break men};s;out;s;w;w;sw;sw;s;w;e;s;sw;sw;sw;ne;ne;ne;n;n;ne;ne;e;e;e}};
+#var db_path[南昌] {{start}{南昌城中心}{path}{n;w;e;e;w;n;n;nw;ne;w;n;n;s;s;su;se;s;s;s;e;n;s;s;enter;w;e;e;w;out;n;e;e;eu;eu;wd;wd;w;w;w;w;n;s;s;n;w;w;wu;wu;wu;ed;nu;enter;w;e;n;s;e;w;out;sd;ed;ed;e;e;e;s;w;e;e;w;s;s;s;se;s;se;nw;n;nw;n;n;n;n}};
+#var db_path[镇江] {{start}{镇江广场}{path}{w;s;n;w;s;n;n;s;w;w;nw;se;e;s;s;e;e;n;w;e;e;w;n;n;e;w;n;e;w;n;nu;sd;w;w;nw;u;d;nw;se;s;s;e;e;e;e;n;s;s;n;e;n;s;s;n;e;n;n;w;w;e;e;s;s;e;se;se;nw;s;se;nw;s;s;e;w;s;n;enter;out;w;wd;eu;e;n;n;n;nw;w;s;s;w;w;n;n}};
+#var db_path[苏州] {{start}{宝带桥}{path}{nw;n;s;s;n;nw;se;w;n;s;s;n;w;w;e;e;e;ne;n;w;s;ne;e;e;w;w;n;w;e;e;w;n;n;s;s;s;s;se;s;n;n;w;e;n;s;ne;e;se;s;n;n;s;e;e;w;w;w;sw;s;w;e;sw;ne;ne;sw;e;ne;sw;e;se;e;e;s;n;w;nw;w;w;s;e;w;s;s;n;n;w;w;w;sw;ne;e;e;e;n;n;ne;e;e;e;e;e;w;w;w;w;w;sw;nw;w;w;w;w;w;s;n;nw;enter;e;out;n;s;enter;w;out;se;w;w;e;nw;ne;sw;se;e;e;e;e;e;e;se;n;n;n;n;n;sw;s;w;wu;ed;eu;n;s;ne;n;s;sw;s;nw;se;e;n;s;w;n;wd;e;n;ne;n;nw;n;nw;se;ne;ne;nw;se;n;nw;se;ne;ne;sw;sw;s;sw;sw;s;se;s;s;s;s;s;s}};
+#var db_path[归云庄] {{start}{归云庄大门}{path}{enter;nu;nu;w;e;e;e;s;n;n;n;w;n;s;s;n;w;w;e;e;e;s;s;e;e;e;s;n;w;w;w;w;w;sd;sd;out;w;w;s;n;n;u;d;s;w;n;s;s;e;w;n;w;nu;nu;sd;sd;w;w;w;w;w;s;e;s;nw;sw;ne;se;n;w;n;e;e;e;e;e;e;e;e;e}};
+#var db_path[小山村] {{start}{打谷场}{path}{nw;nw;w;n;s;nw;nw;n;nw;nu;nu;n;nu;sd;s;sd;sd;se;s;se;se;e;ne;sw;se;sw;ne;se;e;n;s;s;e;w;n;e;n;s;e;s;n;e;e;n;s;ne;sw;se;nw;w;w;w;w;w;s;e;e;w;w;s;e;w;w;nw;se;e;s;e;w;s;s;sw;ne;se;nw;n;n;n;n;n}};
+#var db_path[张家口] {{start}{张家口广场}{path}{n;w;e;e;w;n;n;nw;se;s;s;s;s;w;e;e;w;s;s;w;e;s;w;sw;sw;sd;nu;ne;n;ne;e;e;e;e;e;e;se;se;se;e;e;e;w;w;w;sw;s;s;n;n;ne;nw;w;n;n;n;n}};
+#var db_path[麒麟村] {{start}{麒麟村小广场}{path}{s;s;n;w;e;e;w;n;w;e;e;s;sw;ne;n;w;n;e;w;w;e;n;w;e;n;n;s;s;e;ne;n;ne;eu;eu;e;w;nu;nw;nu;nu;sd;sd;se;sd;wd;wd;sw;s;sw;w;s;s}};
+#var db_path[大理城中] {{start}{6666}{path}{se;n;ne;sw;e;w;se;nw;n;s;s;w;se;s;w;n;s;e;e;e;enter;ne;nw;sw;ne;n;e;nw;sw;ne;se;w;s;se;sw;out;w;w;s;sw;w;e;n;s;s;n;ne;out;e;s;s;s;s;s;w;w;n;enter;n;s;w;u;e;e;enter;out;w;enter;out;w;w;enter;out;e;d;e;out;s;e;e;n;eu;se;se;s;enter;out;n;nw;n;nw;n;enter;out;s;se;s;nw;wd;n;e;s;n;n;s;w;w;n;enter;w;n;s;e;out;s;s;w;e;n;e;n;e;u;d;w;w;e;n;e;s;n;e;w;n;s;w;w;w;e;e;n;e;n;s;w;n;n;n;n;ne;ne;ne;sw;sw;sw;s;s;s;s;w}};
+#var db_path[昆明] {{start}{昆明中心广场}{path}{w;n;s;s;n;e;n;w;e;e;w;n;n;n;n;n;n;s;s;s;s;s;s;s;e;n;s;s;n;e;e;ne;eu;eu;wd;wd;sw;w;w;w;s;w;e;e;w;s;s;s;w;wu;n;nw;w;nw;w;n;w;w;n;enter;out;s;e;e;n;eu;se;nw;wd;n;s;s;s;e;se;e;se;e;e;n;s;s;n;e}};
+#var db_path[灵州] {{start}{灵州皇宫广场}{path}{e;n;n;n;n;w;w;w;w;s;s;s;s;e;n;e;w;w;e;n;e;w;w;e;n;e;w;w;e;n;n;e;e;w;w;w;w;e;e;s;s;s;s;s;s;s;s;w;n;s;s;n;w;n;s;s;n;w;e;nw;nw;se;se;e;e;e;n;s;s;n;e;e;e;e;w;w;w;w;w;s;w;w;e;e;e;e;w;w;s;s;s;s;se;nw;n;n;n;n;n}};
+#var db_path[少林寺] {{start}{方丈楼}{path}{u;n;s;d;e;e;n;n;{open door};e;n;n;s;s;w;n;w;s;s;s;w;w;w;n;n;w;e;n;e;s;s;e;nu;u;n;s;d;sd;n;e;w;w;e;nu;sd;s;s;w;s;s;w;n;n;n;n;n;n;n;n;n;nu;e;e;e;s;s;e;n;n;n;n;n;n;n;n;n;nu;w;w;s;s;sd;s;nu;sd;e;w;w;n;n;w;e;s;s;e;s;nu;sd;e;enter;u;u;u;u;u;u;d;d;d;d;d;d;d;out;w;w;enter;u;u;u;u;u;u;d;d;d;d;d;d;out;e;s;e;w;w;e;sd;e;w;w;e;s;e;w;w;e;n;nu;n;n;n;nu;n;n}};
+#var db_path[紫禁城] {{start}{内金水桥}{path}{w;w;w;e;s;n;n;e;w;w;e;n;n;n;n;e;s;se;ne;n;e;s;s;s;s;e;w;w;e;s;e;w;s;e;w;n;w;w;n;n;nw;n;n;ne;s;w;w;n;s;s;s;e;s;e;e;e;e;n;e;w;n;n;s;w;w;n;se;s;s;sw;n;n;n;n;n;w;w;n;n;n;n;eu;s;n;n;w;w;s;s;w;n;n;w;n;n;e;n;n;w;n;s;e;n;s;e;e;s;n;n;e;w;enter;out;u;d;n;n;w;s;s;s;s;e;e;e;n;e;e;n;n;n;n;wu;n;e;e;s;s;e;n;n;e;e;w;n;e;n;s;w;s;w;w;n;e;w;w;w;n;n;e;e;e;e;n;s;w;w;w;w;n;n;n;e;s;s;s;s;s;sw;n;s;se;n;n;s;s;w;w;w;s;s;s;s;s;s;s;s;s;s}};
+#var db_path[丝绸之路] {{start}{2831}{path}{nw;se;e;{climb mount};w;{enter hole};n;e;ne;se;e;e}};
+#var db_path[平西王府] {{start}{6733}{path}{s;s;s;w;e;e;w;s;s;w;n;s;e;e;w;s;s;s;s;w;e;e;w;s;s;s;s;s;s}};
+#var db_path[黄河南岸] {{start}{黄河南岸黄河入海口}{path}{sw;w;se;se;nw;nw;w;nw;w;sd;nu;w;nw;sw;ne;nw;nw;n;n;ne;n;nw;w;sw;sw;sw;se;se;nw;nw;sw;n;s;sw;sw;sw;se;nw;sw;sw;w}};
+#var db_path[黄河北岸] {{start}{2802}{path}{sw;w;w;ne;sw;nw;w;n;nw;nw;nw;n;n;ne;n;nw;nw;sw;sw;sw;sw;sw;sw;sw;sw;sw;sw;w;e;ne;ne;ne;ne;ne;ne;ne;ne;ne;e;se;s;sw;s;s;se;se;se;s;e;se;e;e;ne}};
+#var db_path[桃花岛] {{start}{桃花岛大厅}{path}{e;e;w;n;w;e;s;s;n;w;w;w;w;nu;ed;wu;sd;wu;eu;wd;ed;e;s;e;e;e;w;w;s;e;e;w;s;s;w;n;n;w;s;s;sd;sd;sd;s;s;n;n;nu;nu;nu;n;n;n;n;e;e}};
+#var db_path[康亲王府] {{start}{康亲王府庭院}{path}{e;w;w;e;s;s;e;s;w;w;n;e;s;s;e;e;e;w;w;w;w;w;w;e;n;s;s;n;e;sw;s;{open door};w;e;n;ne;e;s;w;e;e;w;s;n;n;n;n;n;n;n}};
+#var db_path[洛阳] {{start}{洛阳中心广场}{path}{s;w;e;e;w;s;w;w;s;s;w;s;n;n;n;e;s;n;n;enter;out;s;w;n;s;w;wu;w;w;w;e;e;e;ed;n;s;s;n;e;s;w;e;s;w;nw;nw;nw;n;n;w;e;e;w;n;w;e;e;w;n;w;w;e;e;e;e;w;w;n;w;w;w;{jiali 100};{break north};{jiali 0};n;s;{jiali 100};{break south};s;{jiali 0};n;e;s;n;e;e;e;e;w;w;nd;ne;ne;sw;sw;nw;nw;se;se;su;s;s;s;s;s;se;se;se;e;e;e;s;s;n;n;e;e;e;n;e;e;{knock guancai 3};ed;n;n;s;s;w;e;n;n;n;n;e;w;w;e;s;s;s;s;w;n;n;e;n;s;wu;w;w;s;w;n;sw;n;s;ne;e;w;n;e;eu;ed;e;e;e;e;se;sw;ne;nw;w;w;w;w;wu;wd;w;n;ne;n;{open door};n;e;s;n;n;s;w;w;{open door};n;n;n;s;s;nw;w;w;w;e;n;nu;nd;n;n;s;s;su;sd;s;s;w;u;u;u;w;e;d;d;d;e;e;w;n;e;e;se;{open door};s;e;{open door};s;s;sw;s;w;ne;sw;s;n;n;enter;out;s;e;s;s;w;s;n;w;w;s;n;n;n;e;e;e;w;n;n}};
+#nop {{n;e;w;w;u;u;u;w;w;e;e;d;d;d;e;n;w;e;n;nu;nd;n;n;nu;sd;s;s;su;sd;s;e;e;se;n;n;s;s;{open door};s;{open door};e;e;n;s;s;n;w;{open door};s;{open door};s;sw;s;e;eu;ed;e;e;e;e;se;nw;w;w;w;w;wu;wd;w;w;ne;sw;n;enter;out;s;s;n;w;se;nw;s;w;e;e;w;s;e;w;w;w;e;e;s;s;s;s;n;n;n;w;e;e;s;n;n;s;e;e;n;e;e;w;w;s;w;n;sw;n;s;ne;n;w;w;w;n;enter;out;s;w;e;s;s;e;w;s;s;s;n;w;s;n;w;nw;se;e;n;w;e;n;n;s;w;n;s;s;e;w;se;nw;s;n;sw;ne;w;e;n;wu;w;w;w;w;e;e;e;e;ed;e;e;e}};
+#var db_path[凌霄城] {{start}{凌霄城门}{path}{wu;w;w;w;e;e;e;eu;ed;ne;ne;sw;sw;wd;n;e;w;w;e;n;e;w;w;u;d;e;n;e;n;s;s;n;e;n;s;s;n;e;n;s;s;n;ne;n;nw;sw;w;sd;s;w;n;s;s;n;w;s;n;n;n;ne;sw;s;s;w;n;s;s;n;nw;n;ne;se;e;n;n;s;e;e;w;w;w;w;n;n;w;e;n;w;s;n;n;n;s;s;e;n;s;e;s;n;n;s;e;s;sw;e;e;e;n;e;w;n;e;n;n;s;s;w;n;s;w;n;s;s;n;w;n;n;e;w;w;e;n;e;w;w;e;s;s;s;s;se;e;s;sw;w;sd;s;s;s;s;s}};
+#var db_path[荆州] {{start}{荆州}{path}{s;se;s;n;nw;n;n;n;n;n;e;w;n;s;s;s;s;s}};
+#var db_path[兰州] {{start}{兰州府前广场}{path}{w;n;enter;out;e;e;enter;nw;e;e;sw;n;n;n;n;s;s;s;s;out;s;e;n;n;w;enter;w;e;e;w;s;w;e;e;w;n;out;w;n;s;w;enter;s;s;s;n;w;e;e;w;n;n;out;w;s;s;s;w;e;s;w;e;s;n;n;n;e;s;s;e;n;e;enter;out;s;w;s;s;su;eu;eu;wd;wd;nd;n;n;n;n;e;e;s;e;w;s;e;w;s;enter;su;s;wu;ed;eu;wd;s;w;e;e;w;s;out;su;nd;enter;n;n;n;nd;out;n;n;n;e;nu;n;s;sd;su;s;n;nd;n;n;s;s;s;s;n;n;e;se;s;sw;sw;nw;nw;nw;se;e;nu;n;ne;sw;s;sd;su;s;n;nd;n;n;n;s;s;s;s;s;n;n;e;e;e}};
+#var db_path[古墓] {{start}{断龙石}{path}{w;e;s;s;w;e;s;wu;eu;su;s;s;n;n;nd;wd;ed;n;n;n;east;northeast;northeast;east;{swim river};north;north;east;north;{yun recover};north;west;{yun recover};west;north;{yun recover};north;east;north;west;{ban stone};west;west;u;out;{juan picture};south;south;east;north;north;north;west;north;north;north;north;s;e;w;s;e;w;w;e;s;s;w;e;e;n;s;e;n;s;e;w;w;s;s;s;s;n;w;n;n;s;s;w;s;n;w;e;;nw;n;s;se;e;e;n;n;n;w;n;n;n;n}};
+#var db_path[扬州] {{start}{扬州中央广场}{path}{d;out;enter;u;e;n;w;e;n;s;s;s;n;e;s;s;n;n;n;n;s;s;e;n;s;s;n;e;s;s;w;w;e;e;n;n;w;w;w;w;n;se;nw;e;u;enter;out;d;w;w;s;n;e;n;e;u;e;w;w;e;u;d;d;w;w;u;n;n;s;s;d;e;n;e;w;n;n;s;nw;se;s;s;s;s;w;n;w;e;s;s;n;w;n;n;n;w;e;s;s;s;s;n;w;n;s;s;e;e;e;w;w;w;n;w;nw;se;e;e;e;e;s;nw;se;e;s;n;w;w;d;u;u;e;w;w;e;n;s;s;n;d;e;s;w;w;e;e;e;d;ed;n;s;s;n;wu;u;w;s;w;n;s;s;n;w;e;d;u;e;s;su;wu;ed;se;su;nd;nw;nd;n;e;n;s;s;n;e;n;s;s;n;e;n;s;s;n;e;w;w;w;w;n;n;n}};
+#var db_path[建康府北城] {{start}{5618}{path}{w;s;e;s;w;w;w;w;sw;sw;sd;nu;ne;ne;e;n;w;nu;nd;nd;e;ne;s;n;se;s;e;w;s;e;s;s;n;e;e;sw;w;s;n;n;s;e;ne;w;w;n;w;w;e;n;n;nw;n;n;nu;e;enter;out;w;nw;se;sd;w;e;s;s;nw;se;sw;w;w;sw;ne;n;s;nw;w;e;se;e;su;su;ed;wu;enter;out;sd;w;e;e;s;e;e;n;s;s;n;e;n;w;n;e}};
+#var db_path[建康府南城] {{start}{5560}{path}{w;e;n;w;w;w;nw;n;s;se;e;e;e;e;e;e;e;se;s;su;nd;n;nw;w;w;n;s;w;w;n;w;e;e;w;n;w;w;e;s;n;e;n;n;s;s;s;s;s;s;s;s;se;e;w;se;se;n;n;wu;wu;ed;ed;e;ne;ne;ne;sw;sw;nu;sd;wu;w;nw;nw;se;se;e;ed;se;se;se;nw;nw;nw;sw;se;nw;w;nw;nw;n;n;s;s;se;se;s;s;s;n;nw;nw;nw;eu;eu;wd;wd;n;n;n}};
+#var db_path[明教] {{start}{3996}{path}{w;e;n;e;e;w;n;s;w;w;w;e;e;n;n;w;n;n;n;n;s;s;s;s;e;e;nd;nd;nd;n;n;e;w;w;e;n;s;s;s;su;su;su;w;s;s;s;sd;e;w;w;e;n;s;s;n;sd;sd;sd;w;e;sd;se;e;e;w;n;s;s;n;w;s;sw;ne;w;n;s;e;e;w;se;nw;n;nw;nu;nu;nu;nu}};
+#var db_path[襄阳] {{start}{襄阳城中心}{path}{s;w;e;e;w;s;w;e;s;w;e;e;w;s;s;s;s;e;w;s;s;n;n;n;n;n;n;n;n;n;n;e;w;n;e;w;w;n;s;e;n;w;e;e;e;w;w;n;n;n;{bo xiaolu};ne;sw;n;n;n;n;n;s;s;s;s;s;s;s;s;s;s;s;e;n;s;e;sw;s;w;e;e;w;n;ne;n;n;w;e;s;s;e;s;n;e;e;e;n;s;w;w;w;w;w;w;w;n;s;s;n;w;n;s;s;n;w;w;w;w;n;n;s;s;w;w;w;e;e;e;e;e;e;e;e;e}};
+#var db_path[灵鹫] {{next}{灵鹫山脚}{start}{灵鹫独尊厅}{path}{w;n;s;s;n;w;n;enter;out;s;s;s;n;n;w;w;e;e;e;e;n;n;n;enter;out;s;s;s;e;n;e;e;e;s;s;w;w;w;n;e;e;w;w;w;s;s;s;sd;sd;{climb pine};d;sw;se;nw;ne;nu;nu}};
+#var db_path[灵鹫山脚] {{start}{1894}{path}{sd;sd;s;s;n;w;w;w}};
+#var db_path[全真] {{start}{1610}{path}{e;e;e;n;n;n;w;w;w;s;s;e;{open door};n;{open door};s;e;n;s;w;w;w;n;n;n;s;w;n;n;e;n;e;e;e;e;e;e;s;e;s;s;s;n;n;n;w;n;w;n;n;s;s;w;w;s;s;n;n;w;n;s;w;w;s;w;s;s;s;s;s;s;e;e;e;e;s;s;s;s;sd;s;sd;sd;se;s;se;nw;n;nw;nu;nu;n;nu;e;w;n;e;w;w;e;n;e;e;e;w;n;s;w;n;s;w;w;w;w;w;s;n;e;s;n;e;e;e;n;n;w;w;s;n;w;s;n;w;n;n;n;n;e;s;s;e;n;n;n;s;e;e;n;s;e;n;s;s;s;s;w;s;n;w;w}};
+#var db_path[湟中] {{start}{4223}{path}{ne;e;e;w;w;w;s;sw;s;s;s;n;n;n;w;n;w;wd;eu;e;s;e;ne;n;n;e;s;n;e;s;n;n;w;w;n;e;s;n;w;n;ne;ne;n;s;sw;sw;e;enter;out;w;s;s;e;e;n;s;s;w;w;s;e;sw}};
+#var db_path[峨嵋] {{start}{6406}{path}{ed;sd;sd;sd;s;wd;sd;sd;wd;w;s;sd;sd;s;se;e;w;nw;n;nu;{unwield all};nu;{wield $my_weapon};e;w;n;enter;out;w;e;e;n;s;eu;nu;nu;eu;n;nu;nu;nu;eu;{open door};e;{open door};w;wd;wu;nu;n;n;w;w;w;w;sw;nd;nd;su;su;ne;nu;sd;e;e;n;w;e;e;w;n;w;e;e;w;n;w;w;w;n;s;e;e;e;e;e;e;e;e;e;w;w;n;s;s;w;e;e;w;s;w;e;e;w;s;s;s;e;w;w;e;n;e;w;w;e;n;e;eu;wd;w;w;e;n;n;n;w;n;s;w;s;s;n;n;u;d;n;w;s;n;n;s;w;e;e;n;s;s;w;n;s;w;n;s;s;s;s;s;s;e;w;w;e;n;e;w;w;e;n;e;e;s;s;sd}};
+#var db_path[峨眉后山] {{start}{6473}{path}{n;n;s;s;nw;nw;se;sw;w;nw;w;e;se;e;ne;se;ne;ne;n;s;se;e;w;nw;sw;se;s;se;{zuan hole};e;w;out;nw;n;nw;sw;s;s;s;s;s;s}};
+#var db_path[岳阳] {{start}{5143}{path}{n;e;w;n;n;s;s;s;e;n;s;s;n;e;e;ed;se;nw;wu;w;w;w;s;e;w;w;e;s;s;su;su;su;nd;nd;nd;n;n;n;w;n;s;s;n;w;w;u;d;s;su;nd;w;wu;ed;e;e;n;e;e;e}};
+#var db_path[武当山] {{start}{10552}{path}{w;w;u;d;e;e;e;e;w;w;n;e;w;n;w;{push men};s;{open men};n;w;e;e;e;s;n;e;s;n;w;n;s;w;n;s;s;w;w;n;s;u;u;d;d;e;e;s;s;e;e;w;w;w;w;e;e;s;sd;sd;wd;wd;sd;sd;e;sd;sd;sd;ed;e;e;e;se;e;e;ne;n;e;e;e;w;n;s;w;w;s;sw;w;w;nw;n;s;w;w;s;se;s;n;w;e;nw;n;w;s;n;wu;nu;nu;nu;w;nu;nu;eu;eu;nu;eu;e;e;e;eu;eu;eu;e;e;e;eu;{push stone};enter;out;eu;eu;ne;nu;nw;nu;ne;eu;se;u;nu;eu;su;wu;u;eu;nu;eu;ne;nu;nw;nu;ne;eu;se;u;nu;eu;su;wu;u;nu;nu;nu;n;s;eu;wd;sd;wu;nu;nw;wu;sw;nu;eu;su;wu;u;nu;nw;wu;sw;nu;eu;su;wu;u;nu;nw;wu;sw;nu;eu;su;wu;u;wu;sw;nu;nu;nu;nu;nu;nu;nu;nu;sd;sd;sd;sd;sd;sd;sd;sd;sd;sd;wd;nd;ed;d;sd;nu;u;wu;su;eu;nu;nu;ne;ed;d;ed;nd;wd;sd;ne;ed;se;sd;d;ed;nd;wd;sd;ne;ed;se;sd;d;ed;nd;wd;sd;ne;ed;se;sd;ed;ed;sd;se;ed;ne;ed;sd;wd;nd;d;sd;se;ed;ne;sd;wd;nd;ed;d;sd;se;ed;ne;eu;su;wu;nu;u;eu;ne;nu;nw;nu;eu;su;wu;u;eu;su;wu;nu;u;u;d;d;sd;ed;nd;wd;d;ed;nd;wd;sd;se;sd;sw;wd;d;sd;ed;nd;wd;sw;wu;nw;nu;u;wu;su;eu;nu;sw;wu;nw;nu;u;su;eu;nu;wu;sw;wu;nw;nu;wu;sd;sd;d;ed;nd;wd;sd;d;nw;wd;sw;sd;se;sd;sw;wd;sd;wd;d;ed;nd;wd;sd;d;nw;wd;sw;sd;ed;sd;se;ed;ne;wu;sw;su;se;wu;nu;eu;su;u;nw;wu;sw;su;wu;ed;nd;ne;ed;se;d;nd;wd;sd;ed;nw;nd;ne;ed;sw;wu;nw;nu;wu;se;sd;sw;wd;wd;wd;w;w;w;wd;wd;wd;w;w;w;wd;nu;ed;e;e;ed;sd;ed;sd;ed;e;e;s;n;e;eu;{ask qiao fu about 绝义谷};ed;wu;wd;w;n;s;w;w;n;s;s;n;wu;nu;wu;nu;wu;w;w;wu;n}};
+#var db_path[华山] {{start}{658}{path}{e;e;e;w;n;n;n;e;sd;sd;sd;nu;nu;nu;w;nd;nu;wu;ed;nd;nd;nu;sd;wd;nd;wd;nd;nw;ne;sw;n;s;se;su;eu;su;eu;su;su;sd;wu;u;d;ed;eu;wd;su;s;s;s;s;n;w;s;n;w}};
+#var db_path[北京] {{start}{3042}{path}{ne;{unwield all};ne;sw;sw;e;e;e;s;s;n;n;n;w;w;w;w;n;s;w;sw;ne;se;nw;n;s;w;w;n;e;w;se;nw;n;e;w;n;w;e;e;w;n;nw;sw;s;s;s;s;s;s;s;s;s;s;s;e;n;n;s;s;s;e;e;e;s;w;s;s;sw;n;s;sw;w;enter;out;e;s;sw;u;n;ne;sw;e;w;nw;se;n;s;w;e;s;d;ne;se;nw;n;ne;ne;se;nw;n;e;e;e;e;e;n;n;n;n;n;n;n;w;s;w;e;e;n;s;w;s;w;w;e;e;n;n;n;w;w;w;u;d;s;s;enter;out;n;n;n;u;d;n;e;e;s;s;s;n;n;n;w;w;w;w;e;e;s;s;w;s;n;w;s;n;n;w;w;d;u;s;n;n;s;w;e;e;n;s;s;n;e;s;e;e;e;n;s;s;n;e;e;n;nd;su;{ask shiwei jiaotou about 投军};n;n;s;s;s;s;e;e;ne;n;n;{climb wall};n;w;e;e;w;n;n;s;s;s;s;s;s;sw;w;s;s;s;s;s;s;s;w;w;w;w;w;w;w;w;w;n;s;e;e;e;e;n;w;w;e;e;e;n;w;w;w;n;w;n;n;n;n;n;n;n;n;n;n;n;ne;se;n;s;s;s;s;w;e;s;e;e;e;e;s;n;e;s;n;e;e;s;w;w;w;sw;ne;nw;se;s;s;w;e;n;n;se;u;d;nw;n;u;d;s;{wield $my_weapon}}};
+#var db_path[晋阳] {{start}{2920}{path}{n;n;s;s;e;w;s;enter;out;s;sw;s;s;sw;e;w;n;s;w;w;s;n;n;n;n;ne;sw;s;w;e;e;s;n;ne;sw;e;{knock gate};s;n;ne;sw;e;ne;w;w;w;sw;w;sw;w;e;s;s;w;e;n;n;n;n;e;e;sw;ne;se;w;e;e;s;s;e;e;e;nu;sd;ne;ne;sw;sw;w;w;sw;ne;ne;ne;ne;w;w;w;n;nu;nu;ne;sw;sd;sd;s;w;w;w;s;s;s;sw;sw;sw;s;n;ne;ne;ne;s;s;s;se;e;e;e;e;e;n;ne;ne;w}};
+#var db_path[星宿] {{start}{4281}{path}{s;s;e;e;s;enter;out;s;sd;nd;n;ne;eu;wd;nw;sw;w;e;ne;se;sw;n;s;s;su;s;n;nu;n;n;w;w;n;n}};
+#var db_path[白驼山] {{next}{蛇谷}{start}{2359}{path}{nu;n;ne;e;w;sw;e;w;n;n;w;d;u;e;e;e;ne;sw;w;w;n;e;e;w;w;s;s;s;w;n;s;s;n;e;s;sd;s;sd;sd;e;w;nw;nw;n;w;sw;ne;e;s;se;se;se;e;e;n;s;s;n;w;n;s;w;nw;w;e;nu;e;w;nu}};
+#var db_path[蛇谷] {{start}{蛇谷}{path}{nd;nw;ne;nw;nw;{halt;w};sw;w;sw;w;nw;n;s;se;e;ne;e;ne;nw;w;nw;nw;sw;ne;ne;nw;se;e;w;sw;se;se;e;se;e;{halt;ne};e;se;ne;nw;ne;nw;w;ne;nu}};
+#var db_path[杀手帮] {{start}{杀手帮广场}{path}{w;n;s;s;n;w;n;s;e;e;n;s;e;e;ed;ed;ed;wu;wu;wu;s;e;w;w;e;s;s;n;n;n;w;w;s;ed;sd;s;w;e;s;s;ed;ed}};
+#var db_path[天龙寺] {{start}{6522}{path}{n;w;e;e;w;n;e;u;d;w;n;s;enter;out;w;e;s;s;s;sd;ed;ne;ne;ne;sw;sw;nw;n;s;nu;nu;nu}};
+#var db_path[丐帮] {{start}{扬州中央广场}{path}{hi;{enter shudong};{say 天堂有路你不走呀};d;1;n;n;s;nw;nw;nw;n;nw;up;e;e;s;sw;ne;n;w;n;e;w;w;e;n;e;w;n;s;w;e;s;s;s;e;w;s;n;w;e;n;w;{enter dong};se;s;se;se;se;s;s;2;ne;ne;sw;sw;sw;3;ne;ne;up;sw;e;sd;nw;se;e;e;w;nu;nu;sd;sd;w;nu;w;n;n;s;s;nw;se;ne;{enter dong};sw;sw;sw;4;w;w;e;e;e;5;sw;sw;ne;ne;ne;7;n;ne;ne;n;out;e;e;ne;sw;w;w;nw;w;w;e;sd;nu;e;se;{enter hole};s;sw;sw;s;s;9;sw;s;sw;sw;sw;out;sw;se;nw;wu;nw;se;wd;nw;se;eu;ed;ne;{enter dong};ne;nw;out;wd;s;ne;e;w;sw;s;n;n;nu;wu;ed;ne;nu;sd;e;ne;sw;s;{enter dong};se;ne;ne;n;ne}};
+#var db_path[神龙岛] {{start}{神龙岛峰顶}{path}{sd;ed;sd;sd;sd;s;wd;sd;s;s;sd;s;wd;sd;sd;e;w;nu;nu;eu;n;se;w;e;e;w;n;n;n;{open door};n;s;s;s;s;nw;nu;n;n;nu;eu;n;nu;nu;nu;wu;nu;n;w;w;e;n;s;s;n;e;e;ne;sw;w;n;n;s;s;s}};
+#var db_path[桃源] {{start}{5191}{path}{ne;climb;q;sd;sw;sw;sw;s;e;n;w;s;s;w;out;ne;w}};
+#var db_path[无量山] {{start}{6538}{path}{s;s;ne;nw;se;sw;sw;sw;sw;s;e;n;w;n;w;e;s;ne;ne;ne;s;{push stone};s;e;ed;ed;{push men};e;e;w;n;s;s;out;enter;n;e;n}};
+#var db_path[琴韵小居] {{next}{曼陀山庄}{start}{5982}{path}{w;s;n;w;s;e;w;n;w;s;w;e;n;e;e;n;n;n;s;s;{jump west};w;n;e;sw;se;{jump east};s;s}};
+#var db_path[曼陀山庄] {{start}{6050}{path}{w;n;w;s;s;e;e;w;w;w;s;w;nw;w;w;sw;se;e;e;ne;e;n}};
+#var db_path[姑苏慕容] {{next}{琴韵小居}{start}{燕子坞大门}{path}{s;s;w;s;e;s;e;w;n;n;n;n;n;e;w;w;n;e;e;w;n;w;e;n;w;e;n;s;s;e;ne;e;n;w;e;e;w;n;e;w;w;e;s;s;e;e;w;w;w;sw;w;s;s;s}};
+#var db_path[日月神教] {{start}{3867}{path}{s;w;e;e;w;s;w;e;e;s;w;w;{open door};w;w;s;n;e;n;s;s;n;{open door};e;e;s;e;s;n;e;w;n;s;w;sd;sd;sw;s;n;ne;nu;nu;se;nw;w;n;s;s;n;e}};
+#var db_path[杭州提督府] {{next}{杭州提督府后门}{start}{6253}{path}{s;e;w;s;n;w;n;s;s;n;w;n;w;s;w;e;s;e;n}};
+#var db_path[杭州提督府后门] {{start}{6290}{path}{n;w;e;e;w;out;ne;n;ne;e}};
+#var db_path[岳王墓] {{start}{5403}{path}{w;w;w;sw;s;n;w;n;s;s;n;e;ne;n;n;nw;ne;sw;se;s;s;e;e;e}};
+#var db_path[西湖梅庄] {{start}{8011}{path}{s;w;e;e;w;s;w;w;e;e;s;w;e;e;w;{open gate};s}};
+#var db_path[天坛] {{next}{天坛南天门}{start}{3241}{path}{n;ne;sw;nd;su;s;s;s;se;nw;sd;nu;n;n;wd;w;n;e;s;eu;ed;e;e}};
+#var db_path[天坛南天门] {{next}{天坛北天门}{start}{3253}{path}{se;se}};
+#var db_path[天坛北天门] {{next}{天坛西天门}{start}{3238}{path}{ne;n}};
+#var db_path[天坛西天门] {{start}{天坛西天门}{path}{w;s}};
+
+
+#alias {dbbl} {
+	#var dst_area %1;
+	#var find_npc 0;
+	#list search_path create $db_path[$dst_area][path];
+      #var search_step 1;
+	#list black_npc clear;
+	#list npc_list clear;
+	#list black_npc create {{li mochou}{wu jiang}{gongde xiang}{guan bing}{shou jiang}};
+      #list search_path size bl_num;
+      #var search_action {pro 谍报遍历};
+	#showme 开始遍历：${dst_area}。一共需要执行${bl_num}步。;
+	
+	#class dbbl open;
+
+      #alias {search.next} {
+		#var need_stop 0;
+		#list npc_list clear;
+            #if { $search_step > $bl_num } {
+			#if { "$db_path[$dst_area][next]" != ""  } {
+				#var gps_done_action {dbbl $db_path[$dst_area][next];};
+                  	fly $db_path[$db_path[$dst_area][next]][start];
+			} {
+				#class dbbl kill;
+                  	#showme 遍历完成，没有找到目标;
+				#var gps_done_action {};
+			};
+            } {
+                  #list search_path get $search_step tmp_dir;
+                  #math search_step {$search_step+1};
+                  $tmp_dir;
+                  $search_action;
+            };
+      };
+
+	#alias {npc.look} {
+		#list npc_list size npc_num;
+		#var npc_step 1;
+		look.next;
+	}; 
+
+	#alias {look.next} {
+		#if { $npc_step > $npc_num } {
+			search.next;
+		} {
+			#list npc_list get $npc_step tmp_npc;
+			#math npc_step {$npc_step+1};
+			look $tmp_npc;
+			#list black_npc add $tmp_npc;
+			pro 看一看;
+		};
+	};
+
+      #act {^看一看并不是一个北侠的职业，目前没有相关的信息。$} {
+            #delay {0.3} {
+			#if { "$find_npc" == "0" } {
+				look.next;
+			} {
+				#showme 找到了;
+				job.ask {$find_npc};
+			};
+		};
+      };
+
+	#act {^你随便找人问话，周围的人为之侧目。$} {
+		#if { "$job_ask" == "1" } {
+			#var job_ask 0;
+			look.next;
+		};
+	};
+
+	#act {^谍报遍历并不是一个北侠的职业，目前没有相关的信息。$} {
+            #delay {0.3} {
+                  #if { "$need_stop" == "0" } {search.next} {npc.look};
+            };
+      };
+
+	#act {(%%w %%w)$} {
+		#format npc {%l %l} %%1 %%2;
+		#list black_npc find $npc {is_here};
+		#if {  "%%2" == "she" ||"%%2" == "dizi" || "%%2" == "luohan" || "%%2" == "shiwei"  } {#var is_here 1; };
+		#if { "$is_here" == "0" } {
+			#var need_stop 1;
+			#list npc_list add $npc;
+		};
+	} {4};
+
+	#act {^{他|她}%%1。} {
+		#if { "%%1" == "$job_look" } { #var find_npc $tmp_npc;};
+	};
+
+	#class dbbl close;
+
+	look;
+      $search_action;
+};
+
+
+#alias {dbbl.go} {
+      #var bl_zone %1;
+      #format {bl_area} {%L} {$db_path[${bl_zone}][start]};
+      #if { $bl_area < 2 } {
+            #showme 未知的遍历地点，请补充遍历路径;
+      } {
+            #var gps_done_action {dbbl ${bl_zone};};
+            fly $db_path[${bl_zone}][start];
+      };
+};
+
+
+#alias {bl.search} {
+	#var dst_area %1;
+	#var search_target %2;
+      #var find_npc 0;
+      #list search_path create $db_path[$dst_area][path];
+      #var search_step 1;
+      #list search_path size bl_num;
+      #var search_action {pro 遍历搜索};
+      #showme 开始遍历：${dst_area}。一共需要执行${bl_num}步。;
+
+      #class bl.search open;
+
+      #alias {search.next} {
+            #var need_stop 0;
+            #list npc_list clear;
+            #if { $search_step > $bl_num } {
+
+                  #if { "$db_path[$dst_area][next]" != ""  } {
+                        #var gps_done_action {bl $db_path[$dst_area][next] $search_target;};
+                        fly $db_path[$db_path[$dst_area][next]][start];
+                  } {
+				#class bl.search kill;
+                        #showme 遍历完成，目标没有找到;
+                        #var gps_done_action {};
+                  };
+            } {
+                  #list search_path get $search_step tmp_dir;
+                  #math search_step {$search_step+1};
+                  $tmp_dir;
+                  $search_action;
+            };
+      };	
+
+	#act {^遍历搜索并不是一个北侠的职业，目前没有相关的信息。$} {
+            #delay {0.3} {
+                  #if { "$need_stop" == "0" } {search.next};
+            };
+      };
+
+	#act { %%S(%%2)$} {
+		#var npc_name %%1;
+		#var npc_id %%2;
+		#if { "$search_target" == "$npc_name"  ||  "$search_target" == "$npc_id"   } {
+			#var need_stop 1;
+			#class bl.search kill;
+			#show 搜索遍历完成，目标已经锁定;	
+		};
+	} {3};
+
+	#class bl.search close;
+
+	look;
+      $search_action;	
+};
+
+
+
+#alias {bl.go} {
+	#var bl_zone %1;
+	#var search_target %2;
+	#format {bl_area} {%L} {$db_path[${bl_zone}][start]};
+      #if { $bl_area < 2 } {
+            #showme 未知的遍历地点，请补充遍历路径;
+      } {
+            #var gps_done_action {bl.search ${bl_zone} ${search_target};};
+            fly $db_path[${bl_zone}][start];
+     	};
+};
+
+
+
+#alias {fly.all} {
+	#var fly_dst %1;
+	#var fly_action {pro 定点搜索};
+	#var search_step 1;
+
+	#alias {fly.next} {
+		#math search_step {$search_step+1};
+		#if { "$dst_num" == "1" || $search_step > $dst_num  } {
+			
+		} {
+			#list room_ids create {$roomlist};
+		};
+	};
+
+	#var gps_done_action {fly.next};
+	fly $fly_dst;
+
+};
+
+
+#alias {jobnpc.go} {
+	#var search_dst %1;
+	#regex {$search_dst} {%*{丐帮暗道|长江|黄河|麒麟村山路|张家口官道}%*} {
+            #var search_depth 0;
+            #list search_path create $db_path[$dst_area][path];
+            #format {bl_area} {%L} {$db_path[${bl_zone}][start]};
+            #if { $bl_area < 2 } {
+                  #showme 未知的遍历地点，请补充遍历路径;
+            } {
+                  fly $db_path[${bl_zone}][start];
+            };
+      } {
+		fly $search_dst;
+      };
+};
+
+#alias {jobnpc.search} {
+	#var gps_done_action {};
+	#var npc_id %1;
+	#var search_dst %3;
+	#var job_done_action %2;
+      #var search_action {shou $npc_id;};
+
+	#regex {$search_dst} {%*{丐帮暗道|长江|黄河|麒麟村山路|张家口官道}%*} {
+            #var search_depth 0;
+		#list search_path create $db_path[$dst_area][path];
+		#format {bl_area} {%L} {$db_path[${bl_zone}][start]};
+      	#if { $bl_area < 2 } {
+            	#showme 未知的遍历地点，请补充遍历路径;
+      	} {
+            	#var gps_done_action {bl.search ${bl_zone} ${search_target};};
+            	fly $db_path[${bl_zone}][start];
+      	};
+      } {
+            #var search_depth 3;
+		#var cmd {php ./bin/get_path_full.php "$dst_roomno" "$search_depth" "${user.id}" };
+      	#nop {#showme $cmd;};
+      	INVOKE;
+      };
+
+	#var search_step 1;
+      #list search_path size num;
+
+
+      #alias {search.next} {
+            #if { $search_step > $num } {
+                  #showme 遍历完成;
+            } {
+                  #list search_path get $search_step tmp_dir;
+                  #math search_step {$search_step+1};
+                  $tmp_dir;
+                  $search_action;
+            };
+      };
+
+      #act {^你想收谁作弟子？} {
+            #delay {0.5} {search.next};
+      };
+
+      #act {你想要收%%*为弟子。} {
+            #var job_status 3;
+            $job_done_action;
+      };
+
+      #var do_action {hp};
+      $search_action;
+};
+
+
+#class bl close;
